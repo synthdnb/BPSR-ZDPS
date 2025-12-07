@@ -49,15 +49,6 @@ namespace BPSR_ZDPS
 
             PendingStatToAdd = effectStatTypes.FirstOrDefault();
 
-            CurrentStatPriority = [
-                effectStatTypes.FirstOrDefault(x => x.StatId == 2104),
-                effectStatTypes.FirstOrDefault(x => x.StatId == 2404),
-                effectStatTypes.FirstOrDefault(x => x.StatId == 1114),
-                effectStatTypes.FirstOrDefault(x => x.StatId == 1112),
-                effectStatTypes.FirstOrDefault(x => x.StatId == 1409),
-                effectStatTypes.FirstOrDefault(x => x.StatId == 1113)
-            ];
-
             LoadSavedModData(ModSavePath);
         }
 
