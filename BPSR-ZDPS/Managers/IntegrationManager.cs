@@ -20,26 +20,31 @@ namespace BPSR_ZDPS
 
             BPTimerManager.InitializeBindings();
 
-            System.Diagnostics.Debug.WriteLine("IntegrationManager InitBindings");
+            Log.Information("IntegrationManager InitBindings");
         }
 
         private static void EncounterManager_EncounterEndFinal(EncounterEndFinalData e)
         {
+            Log.Information($"IntegrationManager EncounterManager_EncounterEndFinal [Reason = {e.Reason}]");
+
             // Only care about encounters with actual data in them
             if (!EncounterManager.Current.HasStatsBeenRecorded())
             {
+                Log.Debug($"Encounter has no recorded stats, stopping Report");
                 return;
             }
 
             // We do not currently care about creating reports for benchmarks
             if (e.Reason == EncounterStartReason.BenchmarkEnd)
             {
+                Log.Debug($"Encounter was a Benchmark, ignoring Report");
                 return;
             }
 
             // Don't create reports for Null (Open World) states as we don't handle their encounters nicely yet
-            if (EncounterManager.Current.DungeonState == EDungeonState.DungeonStateNull)
+            if (EncounterManager.Current.DungeonState == EDungeonState.DungeonStateNull && e.Reason != EncounterStartReason.Restart && e.Reason != EncounterStartReason.NewObjective)
             {
+                Log.Debug($"Encounter was reported as being in the Open World and we do not support it yet");
                 return;
             }
 
@@ -64,14 +69,14 @@ namespace BPSR_ZDPS
                 Log.Debug($"BossAttrHp={bossHp}, BossAttrMaxHp={bossMaxHp}, HpPct={EncounterManager.Current.BossHpPct}");
             }
             if (
-                e.Reason == EncounterStartReason.NewObjective ||
+                e.Reason == EncounterStartReason.NewObjective || e.Reason == EncounterStartReason.Restart ||
                 (
                 EncounterManager.Current.BossUUID > 0 && (bossState != null && (bossEntity?.Hp == 0 || (EActorState)bossState == EActorState.ActorStateDead) || EncounterManager.Current.IsWipe)
                 )
                 )
             //if (e.Reason == EncounterStartReason.NewObjective || (EncounterManager.Current.BossUUID > 0 && (EncounterManager.Current.BossHpPct == 0 || EncounterManager.Current.IsWipe)))
             {
-                Log.Debug("IntegrationManager is creating an Encounter Report.");
+                Log.Debug($"IntegrationManager is creating an Encounter Report [Reason = {e.Reason}].");
                 HelperMethods.DeferredImGuiRenderAction = () =>
                 {
                     // Hold onto a reference for the Encounter as once we enter the task it will no longer be the current one and may already be moved into the database

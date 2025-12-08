@@ -115,7 +115,7 @@ namespace BPSR_ZDPS
                 }
 
                 // This is safe to call to ensure we're sending a proper End Final before a new Encounter is made no matter what
-                BattleStateMachine.SetDeferredEncounterEndFinalData(DateTime.Now, new EncounterEndFinalData() { EncounterId = Current.EncounterId, BattleId = Current.BattleId, Reason = reason });
+                BattleStateMachine.SetDeferredEncounterEndFinalData(DateTime.Now.Subtract(new TimeSpan(0, 0, 1)), new EncounterEndFinalData() { EncounterId = Current.EncounterId, BattleId = Current.BattleId, Reason = reason });
                 BattleStateMachine.CheckDeferredCalls();
             }
             //Encounters.Add(new Encounter(CurrentBattleId));
@@ -262,9 +262,10 @@ namespace BPSR_ZDPS
         NewObjective = 1, // New Objective potentially a new Phase
         Wipe = 2, // Current Encounter was a wipe
         Force = 3, // We don't know the reason but we know it needs to force a new one (possibly a map transition)
-        TimedOut = 4,
-        BenchmarkStart = 5,
-        BenchmarkEnd = 6,
+        Restart = 4,
+        TimedOut = 5,
+        BenchmarkStart = 6,
+        BenchmarkEnd = 7,
     }
 
     public class Encounter

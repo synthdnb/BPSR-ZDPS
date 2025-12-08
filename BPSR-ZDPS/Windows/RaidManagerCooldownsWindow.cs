@@ -423,6 +423,21 @@ namespace BPSR_ZDPS.Windows
 
                 ImGui.Text($"Raid Manager - {TITLE}");
 
+                ImGui.SetCursorPosX(MenuBarSize.X - (MenuBarButtonWidth * 4));
+                ImGui.PushFont(HelperMethods.Fonts["FASIcons"], ImGui.GetFontSize());
+                if (ImGui.MenuItem($"{FASIcons.Rotate}"))
+                {
+                    foreach (var trackedEntity in TrackedEntities)
+                    {
+                        foreach (var trackedSkill in trackedEntity.Value)
+                        {
+                            trackedSkill.ForceEndCooldown();
+                        }
+                    }
+                }
+                ImGui.PopFont();
+                ImGui.SetItemTooltip("Clear All Active Cooldown Timers");
+
                 ImGui.SetCursorPosX(MenuBarSize.X - (MenuBarButtonWidth * 3));
                 ImGui.PushFont(HelperMethods.Fonts["FASIcons"], ImGui.GetFontSize());
                 ImGui.PushStyleColor(ImGuiCol.Text, new Vector4(1.0f, 1.0f, 1.0f, IsTopMost ? 1.0f : 0.5f));
@@ -526,6 +541,11 @@ namespace BPSR_ZDPS.Windows
         {
             ActivationTime = activationTime;
             ExpectedEndTime = ActivationTime.AddMilliseconds(SkillCooldownDefined);
+        }
+
+        public void ForceEndCooldown()
+        {
+            ExpectedEndTime = null;
         }
 
         public TimeSpan GetTimeRemaining()

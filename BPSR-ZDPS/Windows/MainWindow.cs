@@ -45,6 +45,7 @@ namespace BPSR_ZDPS.Windows
             DatabaseManagerWindow.Draw(this);
             SpawnTrackerWindow.Draw(this);
             ModuleSolver.Draw();
+            EntityCacheViewerWindow.Draw(this);
         }
 
         static bool p_open = true;
@@ -365,6 +366,10 @@ namespace BPSR_ZDPS.Windows
                         if (ImGui.MenuItem("Dungeon Tracker"))
                         {
                             DebugDungeonTracker.Open();
+                        }
+                        if (ImGui.MenuItem("Entity Cache Viewer"))
+                        {
+                            EntityCacheViewerWindow.Open();
                         }
                         ImGui.EndMenu();
                     }

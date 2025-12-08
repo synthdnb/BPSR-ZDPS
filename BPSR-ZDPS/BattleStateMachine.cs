@@ -98,6 +98,7 @@ namespace BPSR_ZDPS
                         // Our first map entry objective is the same as the newest one we were just given
                         // This is likely some form of reset such as killing one of the Raid bosses but others have not been beat yet
                         EncounterManager.StopEncounter();
+                        EncounterManager.StartEncounter(false, EncounterStartReason.Restart);
                         return;
                     }
                 }
@@ -123,7 +124,7 @@ namespace BPSR_ZDPS
                 if (dungeonTargetData.Complete == 0 && dungeonTargetData.Nums == 0)
                 {
                     // New objective set
-
+                    Log.Debug("DungeonTargetDataHistoryAdd - Deferring a New Objective EncounterStart");
                     // TODO: If this was set within a very short time after Complete, delay the start creation to allow resolving effects against despawning enemies properly
                     DeferredEncounterStartReason = EncounterStartReason.NewObjective;
                     DeferredEncounterStartTime = DateTime.Now.AddSeconds(1);
@@ -149,11 +150,13 @@ namespace BPSR_ZDPS
                 if (DeferredEncounterEndFinalTime == null)
                 {
                     // Encounter has already signaled the final end
+                    Log.Debug("SetDeferredEncounterEndFinalData - Encounter has already signaled the final end");
                     return;
                 }
                 else if (dateTime.CompareTo(DeferredEncounterEndFinalTime) >= 0)
                 {
                     // We'll only allow updating the time to be sooner, not later
+                    Log.Debug("SetDeferredEncounterEndFinalData - New time is not sooner than already set callback");
                     return;
                 }
             }
