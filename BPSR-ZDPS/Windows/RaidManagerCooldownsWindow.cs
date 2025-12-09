@@ -529,7 +529,7 @@ namespace BPSR_ZDPS.Windows
         }
     }
 
-    public class RaidManagerCooldownsWindowSettings
+    public class RaidManagerCooldownsWindowSettings : WindowSettingsBase
     {
         public float WindowOpacity = 1.0f;
     }

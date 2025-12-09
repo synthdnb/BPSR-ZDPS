@@ -564,11 +564,27 @@ namespace BPSR_ZDPS.Windows
                                 ImGui.Indent();
 
                                 ImGui.AlignTextToFramePadding();
+                                ImGui.Text("Spawn Tracker Text Scale: ");
+                                ImGui.SetNextItemWidth(-1);
+                                ImGui.PushStyleColor(ImGuiCol.FrameBgHovered, ImGui.GetColorU32(ImGuiCol.FrameBgHovered, 0.55f));
+                                ImGui.PushStyleColor(ImGuiCol.FrameBgActive, ImGui.GetColorU32(ImGuiCol.FrameBgActive, 0.55f));
+                                if (ImGui.SliderFloat("##BPTimerSpawnTrackerTextScale", ref windowSettings.SpawnTracker.TextScale, 0.80f, 3.0f, $"{(int)(windowSettings.SpawnTracker.TextScale * 100)}%%"))
+                                {
+                                    windowSettings.SpawnTracker.TextScale = MathF.Round(windowSettings.SpawnTracker.TextScale, 2);
+                                }
+                                ImGui.PopStyleColor(2);
+                                ImGui.Indent();
+                                ImGui.BeginDisabled(true);
+                                ImGui.TextWrapped("Scaling for how the text in the Spawn Tracker window should be. 100%% is the default scale.");
+                                ImGui.EndDisabled();
+                                ImGui.Unindent();
+
+                                ImGui.AlignTextToFramePadding();
                                 ImGui.Text("Spawn Tracker Line Scale: ");
                                 ImGui.SetNextItemWidth(-1);
                                 ImGui.PushStyleColor(ImGuiCol.FrameBgHovered, ImGui.GetColorU32(ImGuiCol.FrameBgHovered, 0.55f));
                                 ImGui.PushStyleColor(ImGuiCol.FrameBgActive, ImGui.GetColorU32(ImGuiCol.FrameBgActive, 0.55f));
-                                if (ImGui.SliderFloat("##BPTimerSpawnTrackerLineScale", ref windowSettings.SpawnTracker.LineScale, 0.80f, 2.0f, $"{(int)(windowSettings.SpawnTracker.LineScale * 100)}%%"))
+                                if (ImGui.SliderFloat("##BPTimerSpawnTrackerLineScale", ref windowSettings.SpawnTracker.LineScale, 0.80f, 3.0f, $"{(int)(windowSettings.SpawnTracker.LineScale * 100)}%%"))
                                 {
                                     windowSettings.SpawnTracker.LineScale = MathF.Round(windowSettings.SpawnTracker.LineScale, 2);
                                 }

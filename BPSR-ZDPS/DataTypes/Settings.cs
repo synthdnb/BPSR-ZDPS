@@ -106,6 +106,14 @@ public class SettingsExternal
     public BPTimerSettings BPTimerSettings { get; set; } = new();
 }
 
+public class WindowSettingsBase : ICloneable
+{
+    public virtual object Clone()
+    {
+        return this.MemberwiseClone();
+    }
+}
+
 public class WindowSettings : ICloneable
 {
     public RaidManagerCooldownsWindowSettings RaidManagerCooldowns { get; set; } = new();
@@ -114,6 +122,10 @@ public class WindowSettings : ICloneable
 
     public object Clone()
     {
-        return this.MemberwiseClone();
+        var cloned = (WindowSettings)this.MemberwiseClone();
+        cloned.RaidManagerCooldowns = (RaidManagerCooldownsWindowSettings)this.RaidManagerCooldowns.Clone();
+        cloned.EntityCacheViewer = (EntityCacheViewerWindowSettings)this.EntityCacheViewer.Clone();
+        cloned.SpawnTracker = (SpawnTrackerWindowSettings)this.SpawnTracker.Clone();
+        return cloned;
     }
 }

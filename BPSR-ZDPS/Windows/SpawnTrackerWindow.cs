@@ -104,8 +104,8 @@ namespace BPSR_ZDPS.Windows
 
                 DrawMenuBar();
 
-                float lineScale = 18.0f * Settings.Instance.WindowSettings.SpawnTracker.LineScale;
-                ImGui.PushFont(HelperMethods.Fonts["Segoe"], lineScale);
+                float textScale = 18.0f * Settings.Instance.WindowSettings.SpawnTracker.TextScale;
+                ImGui.PushFont(HelperMethods.Fonts["Segoe"], textScale);
 
                 if (BPTimerManager.SpawnDataLoaded == BPTimerManager.ESpawnDataLoadStatus.NotLoaded)
                 {
@@ -239,6 +239,8 @@ namespace BPSR_ZDPS.Windows
                             foreach (var status in statusDescriptors)
                             {
                                 float lineWidth = 50 * Settings.Instance.WindowSettings.SpawnTracker.LineScale;
+                                float lineHeight = 18.0f * Settings.Instance.WindowSettings.SpawnTracker.LineScale;
+
                                 int lineItemCount = (int)MathF.Floor(groupSize.X / (lineWidth + ImGui.GetStyle().ItemSpacing.X));
 
                                 bool shouldSameLine = currentItemCount == 0 || currentItemCount % (lineItemCount) != 0;
@@ -286,8 +288,9 @@ namespace BPSR_ZDPS.Windows
                                 {
                                     ImGui.PushStyleColor(ImGuiCol.PlotHistogram, new Vector4(28 / 255f, 180 / 255f, 84 / 255f, 0.85f));
                                 }
-
-                                ImGuiEx.TextAlignedProgressBar(pct, $"{status.ChannelNumber}", 0.5f, lineWidth, lineScale);
+                                ImGui.PushFont(HelperMethods.Fonts["Segoe"], lineHeight);
+                                ImGuiEx.TextAlignedProgressBar(pct, $"{status.ChannelNumber}", 0.5f, lineWidth, lineHeight);
+                                ImGui.PopFont();
                                 if (shouldSameLine)
                                 {
                                     ImGui.SameLine();
@@ -319,7 +322,8 @@ namespace BPSR_ZDPS.Windows
                                             var tex = ImageArchive.LoadImage(Path.Combine("BPTimer", "Maps", $"{status.MonsterId}_{status.Location}"));
                                             if (tex != null)
                                             {
-                                                ImGui.Image((ImTextureRef)tex, new Vector2(128, 128));
+                                                float texSize = 128.0f * Settings.Instance.WindowSettings.SpawnTracker.TextScale;
+                                                ImGui.Image((ImTextureRef)tex, new Vector2(texSize, texSize));
                                             }
                                         }
                                         ImGui.EndTooltip();
@@ -412,9 +416,10 @@ namespace BPSR_ZDPS.Windows
         }
     }
 
-    public class SpawnTrackerWindowSettings
+    public class SpawnTrackerWindowSettings : WindowSettingsBase
     {
         public float WindowOpacity = 1.0f;
+        public float TextScale = 1.0f;
         public float LineScale = 1.0f;
     }
 }

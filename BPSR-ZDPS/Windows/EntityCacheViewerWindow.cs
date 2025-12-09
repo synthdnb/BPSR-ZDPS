@@ -173,7 +173,7 @@ namespace BPSR_ZDPS
         }
     }
 
-    public class EntityCacheViewerWindowSettings
+    public class EntityCacheViewerWindowSettings : WindowSettingsBase
     {
         public float WindowOpacity = 1.0f;
     }
