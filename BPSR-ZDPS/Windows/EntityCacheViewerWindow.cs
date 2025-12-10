@@ -79,8 +79,16 @@ namespace BPSR_ZDPS
                 ImGui.PushItemWidth(ImGui.GetContentRegionAvail().X);
                 if (ImGui.InputText("##EntityFilterText", ref EntityNameFilter, 64))
                 {
-                    bool isNum = EntityNameFilter.Length > 0 && Char.IsNumber(EntityNameFilter[0]);
-                    EntityFilterMatches = EntityCache.Instance.Cache.Lines.AsValueEnumerable().Where(x => isNum ? x.Key.ToString().Contains(EntityNameFilter) : x.Value.Name != null && x.Value.Name.Contains(EntityNameFilter, StringComparison.OrdinalIgnoreCase)).ToArray();
+                    if (EntityNameFilter.Length == 0)
+                    {
+                        // We don't want to show the entire cache as it comes with a massive performance cost currently (we don't use virtualization/clippers yet)
+                        EntityFilterMatches = [];
+                    }
+                    else
+                    {
+                        bool isNum = EntityNameFilter.Length > 0 && Char.IsNumber(EntityNameFilter[0]);
+                        EntityFilterMatches = EntityCache.Instance.Cache.Lines.AsValueEnumerable().Where(x => isNum ? x.Key.ToString().Contains(EntityNameFilter) : x.Value.Name != null && x.Value.Name.Contains(EntityNameFilter, StringComparison.OrdinalIgnoreCase)).ToArray();
+                    }
                 }
 
                 if (ImGui.BeginListBox("##SearchResultsListBox", new Vector2(-1, -1)))
