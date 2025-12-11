@@ -76,7 +76,7 @@ namespace BPSR_ZDPS
                     {
                         long lowestHp = bossEntity.MaxHp;
 
-                        int stackSize = bossEntity.RecentHpHistory.Count > 4 ? 4 : bossEntity.RecentHpHistory.Count;
+                        int stackSize = bossEntity.RecentHpHistory.Count > 8 ? 8 : bossEntity.RecentHpHistory.Count;
                         for (int i = 0; i < stackSize; i++)
                         {
                             long historicalHp = bossEntity.RecentHpHistory.ElementAt(i);
@@ -504,6 +504,7 @@ namespace BPSR_ZDPS
             {
                 if (!entity.IsHpUpdatedHandlerSubscribed(OnEntityHpUpdated))
                 {
+                    UpdateEncounterBossData(entity, -1);
                     entity.HpUpdated += OnEntityHpUpdated;
                 }
                 entity.SetHpValues((long)value, -1);
@@ -590,7 +591,10 @@ namespace BPSR_ZDPS
                 if (!BossUUIDs.Contains(entity.UUID))
                 {
                     BossUUIDs.Add(entity.UUID);
-                    entity.HpUpdated += OnBossHpUpdated;
+                    if (!entity.IsHpUpdatedHandlerSubscribed(OnBossHpUpdated))
+                    {
+                        entity.HpUpdated += OnBossHpUpdated;
+                    }
                 }
 
                 if (BossUUID == 0)
@@ -770,16 +774,24 @@ namespace BPSR_ZDPS
             // This will result in the last updated entity to become the new boss as long as the HP is not max
             if (entity.Hp > -1 && entity.MaxHp > 0 && entity.Hp < entity.MaxHp)
             {
+                long attrId = 0;
+                var attr_id = entity.GetAttrKV("AttrId");
+                if (attr_id != null)
+                {
+                    attrId = (long)(int)attr_id;
+                }
+
                 // Entity has taken damage and is likely the real boss if there's multiple found
-                if (BossUUID != entity.UUID)
+                if (BossUUID != entity.UUID || BossAttrId != attrId)
                 {
                     BossUUID = entity.UUID;
                     BossName = entity.Name;
-                    var attr_id = entity.GetAttrKV("AttrId");
+                    BossAttrId = attrId;
+                    /*var attr_id = entity.GetAttrKV("AttrId");
                     if (attr_id != null)
                     {
                         BossAttrId = (long)(int)attr_id;
-                    }
+                    }*/
                 }
 
                 BossHpPct = (int)(((double)entity.Hp / (double)entity.MaxHp) * 100000.0);
@@ -1054,7 +1066,7 @@ namespace BPSR_ZDPS
                 Hp = hp;
 
                 // We store only the last few updates so we can walk it back on wipes to see last real hp value
-                if (RecentHpHistory.Count > 5)
+                if (RecentHpHistory.Count > 10)
                 {
                     RecentHpHistory.TryDequeue(out _);
                 }

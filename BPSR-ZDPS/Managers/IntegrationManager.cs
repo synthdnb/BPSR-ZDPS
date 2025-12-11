@@ -135,7 +135,7 @@ namespace BPSR_ZDPS
             else
             {
                 Log.Information($"IntegrationManager EncounterEndFinal did not detect a dead boss or wipe in Battle:{e.BattleId} Encounter: {e.EncounterId}.");
-                Log.Debug($"BossUUID:{EncounterManager.Current.BossUUID}, BossHpPct:{EncounterManager.Current.BossHpPct}, IsWipe:{EncounterManager.Current.IsWipe}");
+                Log.Debug($"BossName:{EncounterManager.Current.BossName} BossUUID:{EncounterManager.Current.BossUUID}, BossHpPct:{EncounterManager.Current.BossHpPct}, IsWipe:{EncounterManager.Current.IsWipe}");
                 if (bossState != null)
                 {
                     Log.Debug($"BossState {(EActorState)bossState}");
