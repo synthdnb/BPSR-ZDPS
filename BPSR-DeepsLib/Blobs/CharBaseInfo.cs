@@ -23,12 +23,12 @@ public class CharBaseInfo : BlobType
     public long? CreateTime;
     public long? OnlineTime;
     public long? OfflineTime;
-    // ProfileInfo
+    public ProfileInfo? ProfileInfo;
     public CharTeam? TeamInfo;
     public ulong? CharState;
-    // BodySize
-    // UnionInfo
-    // PersonalState
+    public Zproto.EBodySize? BodySize;
+    public UserUnion? UnionInfo;
+    public List<int>? PersonalState;
     // AvatarInfo
     public ulong? TotalOnlineTime;
     public string? OpenId;
@@ -113,8 +113,8 @@ public class CharBaseInfo : BlobType
                 OfflineTime = blob.ReadLong();
                 return true;
             case Zproto.CharBaseInfo.ProfileInfoFieldNumber:
-                // TODO: Implement ProfileInfo
-                return false;
+                ProfileInfo = new(blob);
+                return true;
             case Zproto.CharBaseInfo.TeamInfoFieldNumber:
                 TeamInfo = new(blob);
                 return true;
@@ -122,14 +122,14 @@ public class CharBaseInfo : BlobType
                 CharState = blob.ReadULong();
                 return true;
             case Zproto.CharBaseInfo.BodySizeFieldNumber:
-                // TODO: Implement BodySize
-                return false;
+                BodySize = (Zproto.EBodySize)blob.ReadInt();
+                return true;
             case Zproto.CharBaseInfo.UnionInfoFieldNumber:
-                // TODO: Implement UnionInfo
-                return false;
+                UnionInfo = new(blob);
+                return true;
             case Zproto.CharBaseInfo.PersonalStateFieldNumber:
-                // TODO: Implement PersonalState
-                return false;
+                PersonalState = blob.ReadList<int>();
+                return true;
             case Zproto.CharBaseInfo.AvatarInfoFieldNumber:
                 // TODO: Implement AvatarInfo
                 return false;
