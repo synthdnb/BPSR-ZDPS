@@ -313,7 +313,7 @@ namespace BPSR_ZDPS.Windows
                 if (SelectedEncounterIndex != -1)
                 {
                     ImGuiTableFlags tableFlags = ImGuiTableFlags.ScrollX;
-                    int columnsCount = 26;
+                    int columnsCount = 25;
                     if (ImGui.BeginTable("##HistoricalEncounterStatsTable", columnsCount, tableFlags, new Vector2(-1, -1)))
                     {
                         ImGui.TableSetupColumn("#");
@@ -321,7 +321,7 @@ namespace BPSR_ZDPS.Windows
                         ImGui.TableSetupColumn("Name");
                         ImGui.TableSetupColumn("Profession");
                         ImGui.TableSetupColumn("Ability Score");
-                        ImGui.TableSetupColumn("Total Damage");
+                        ImGui.TableSetupColumn("Total DMG");
                         ImGui.TableSetupColumn("Total DPS");
                         ImGui.TableSetupColumn("Shield Break");
                         ImGui.TableSetupColumn("Crit Rate");
@@ -329,7 +329,7 @@ namespace BPSR_ZDPS.Windows
                         ImGui.TableSetupColumn("Crit DMG");
                         ImGui.TableSetupColumn("Lucky DMG");
                         ImGui.TableSetupColumn("Crit Lucky DMG");
-                        ImGui.TableSetupColumn("Max Instant DPS");
+                        ImGui.TableSetupColumn("Max Single DPS");
                         ImGui.TableSetupColumn("Shield Gain");
                         ImGui.TableSetupColumn("Total Healing");
                         ImGui.TableSetupColumn("Total HPS");
@@ -338,9 +338,8 @@ namespace BPSR_ZDPS.Windows
                         ImGui.TableSetupColumn("Crit Healing");
                         ImGui.TableSetupColumn("Lucky Healing");
                         ImGui.TableSetupColumn("Crit Lucky Healing");
-                        ImGui.TableSetupColumn("Max Instant HPS");
+                        ImGui.TableSetupColumn("Max Single HPS");
                         ImGui.TableSetupColumn("Damage Taken");
-                        ImGui.TableSetupColumn("Taken %");
                         ImGui.TableSetupColumn("Deaths");
                         ImGui.TableHeadersRow();
 
@@ -513,22 +512,20 @@ namespace BPSR_ZDPS.Windows
                             ImGui.TextUnformatted($"{Utils.NumberToShorthand(entity.HealingStats.ValueMax)}");
 
                             ImGui.TableNextColumn();
-                            ImGui.TextUnformatted(Utils.NumberToShorthand(entity.TotalTakenDamage));
-
-                            ImGui.TableNextColumn();
-                            double totalTaken = 0;
+                            string totalDamageTaken = Utils.NumberToShorthand(entity.TotalTakenDamage);
+                            double totalDamageTakenPct = 0;
                             if (entity.TotalTakenDamage > 0)
                             {
                                 if (entity.EntityType == Zproto.EEntityType.EntChar)
                                 {
-                                    totalTaken = Math.Round(((double)entity.TotalTakenDamage / (double)encounters[SelectedEncounterIndex].TotalTakenDamage) * 100, 0);
+                                    totalDamageTakenPct = Math.Round(((double)entity.TotalTakenDamage / (double)encounters[SelectedEncounterIndex].TotalTakenDamage) * 100, 0);
                                 }
                                 else if (entity.EntityType == Zproto.EEntityType.EntMonster)
                                 {
-                                    totalTaken = Math.Round(((double)entity.TotalTakenDamage / (double)encounters[SelectedEncounterIndex].TotalNpcTakenDamage) * 100, 0);
+                                    totalDamageTakenPct = Math.Round(((double)entity.TotalTakenDamage / (double)encounters[SelectedEncounterIndex].TotalNpcTakenDamage) * 100, 0);
                                 }
                             }
-                            ImGui.TextUnformatted($"{Utils.NumberToShorthand(totalTaken)}%");
+                            ImGui.TextUnformatted($"{totalDamageTaken} ({totalDamageTakenPct})%");
 
                             ImGui.TableNextColumn();
                             ImGui.TextUnformatted($"{entity.TotalDeaths}");

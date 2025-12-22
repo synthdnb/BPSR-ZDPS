@@ -56,7 +56,7 @@ namespace BPSR_ZDPS.Windows
 
             ImGui.PushFont(HelperMethods.Fonts["Segoe_Offscreen"], 18f);
             // Removed ImGuiTableFlags.ScrollX for the direct SizingFixedFit flag instead to perform same layout be ensure the scroll bar never appears at the bottom
-            if (ImGui.BeginTable("##ReportTable", 23, ImGuiTableFlags.ScrollY | ImGuiTableFlags.SizingFixedFit, new Vector2(-1, -1)))
+            if (ImGui.BeginTable("##ReportTable", 25, ImGuiTableFlags.ScrollY | ImGuiTableFlags.SizingFixedFit, new Vector2(-1, -1)))
             {
                 ImGui.TableSetupColumn("#");
                 ImGui.TableSetupColumn("UID");
@@ -65,12 +65,14 @@ namespace BPSR_ZDPS.Windows
                 ImGui.TableSetupColumn("Ability Score");
                 ImGui.TableSetupColumn("Total DMG");
                 ImGui.TableSetupColumn("Total DPS");
+                ImGui.TableSetupColumn("Shield Break");
                 ImGui.TableSetupColumn("Crit Rate");
                 ImGui.TableSetupColumn("Lucky Rate");
                 ImGui.TableSetupColumn("Crit DMG");
                 ImGui.TableSetupColumn("Lucky DMG");
                 ImGui.TableSetupColumn("Crit Lucky DMG");
                 ImGui.TableSetupColumn("Max Single DMG");
+                ImGui.TableSetupColumn("Shield Gain");
                 ImGui.TableSetupColumn("Total Healing");
                 ImGui.TableSetupColumn("Total HPS");
                 ImGui.TableSetupColumn("Effective Healing");
@@ -147,7 +149,8 @@ namespace BPSR_ZDPS.Windows
                     ImGui.TableNextColumn();
                     ImGui.TextUnformatted(Utils.NumberToShorthand(entity.DamageStats.ValuePerSecond));
 
-                    // ShieldBreak
+                    ImGui.TableNextColumn();
+                    ImGui.Text(Utils.NumberToShorthand(entity.TotalShieldBreak));
 
                     ImGui.TableNextColumn();
                     ImGui.TextUnformatted($"{entity.DamageStats.CritRate}%");
@@ -167,7 +170,8 @@ namespace BPSR_ZDPS.Windows
                     ImGui.TableNextColumn();
                     ImGui.TextUnformatted($"{Utils.NumberToShorthand(entity.DamageStats.ValueMax)}");
 
-                    // TotalShield
+                    ImGui.TableNextColumn();
+                    ImGui.TextUnformatted(Utils.NumberToShorthand(entity.TotalShield));
 
                     ImGui.TableNextColumn();
                     ImGui.TextUnformatted(Utils.NumberToShorthand(entity.TotalHealing));
@@ -260,6 +264,9 @@ namespace BPSR_ZDPS.Windows
                     ImGui.TextUnformatted(Utils.NumberToShorthand(dps.Sum()));
 
                     ImGui.TableNextColumn();
+                    // Shield Break
+
+                    ImGui.TableNextColumn();
                     // Crit Rate
 
                     ImGui.TableNextColumn();
@@ -282,6 +289,9 @@ namespace BPSR_ZDPS.Windows
 
                     ImGui.TableNextColumn();
                     // Max Single Damage
+
+                    ImGui.TableNextColumn();
+                    // Shield Gain
 
                     ImGui.TableNextColumn();
                     ImGui.TextUnformatted(Utils.NumberToShorthand(encounter.TotalHealing));
