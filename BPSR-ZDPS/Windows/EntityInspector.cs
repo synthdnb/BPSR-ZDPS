@@ -276,7 +276,7 @@ namespace BPSR_ZDPS.Windows
                     string valueExtraTotalLabel = "";
                     string valueTotalPerSecondLabel = "";
 
-                    CombatStats2 combatStats = null;
+                    CombatStats combatStats = null;
 
                     switch (TableFilterMode)
                     {
@@ -419,31 +419,31 @@ namespace BPSR_ZDPS.Windows
                         string valueShareColumnName = "Total DMG %";
                         string valueExtraStatColumnName = "";
 
-                        IReadOnlyList<KeyValuePair<int, CombatStats2>> skillStats = null;
+                        IReadOnlyList<KeyValuePair<int, CombatStats>> skillStats = null;
 
                         switch (TableFilterMode)
                         {
                             case ETableFilterMode.SkillsDamage:
-                                skillStats = (IReadOnlyList<KeyValuePair<int, CombatStats2>>)(LoadedEntity.SkillStats.AsValueEnumerable().Where(x => x.Value.SkillType == ESkillType.Damage).OrderByDescending(x => x.Value.ValueTotal).ToList());
+                                skillStats = (IReadOnlyList<KeyValuePair<int, CombatStats>>)(LoadedEntity.SkillStats.AsValueEnumerable().Where(x => x.Value.SkillType == ESkillType.Damage).OrderByDescending(x => x.Value.ValueTotal).ToList());
                                 valueTotalColumnName = "Damage";
                                 valuePerSecondColumnName = "Total DPS";
                                 valueShareColumnName = "Total DMG %";
                                 break;
                             case ETableFilterMode.SkillsHealing:
-                                skillStats = (IReadOnlyList<KeyValuePair<int, CombatStats2>>)(LoadedEntity.SkillStats.AsValueEnumerable().Where(x => x.Value.SkillType == ESkillType.Healing).OrderByDescending(x => x.Value.ValueTotal).ToList());
+                                skillStats = (IReadOnlyList<KeyValuePair<int, CombatStats>>)(LoadedEntity.SkillStats.AsValueEnumerable().Where(x => x.Value.SkillType == ESkillType.Healing).OrderByDescending(x => x.Value.ValueTotal).ToList());
                                 valueTotalColumnName = "Healing";
                                 valuePerSecondColumnName = "Total HPS";
                                 valueShareColumnName = "Total HEAL %";
                                 break;
                             case ETableFilterMode.SkillsTaken:
-                                skillStats = (IReadOnlyList<KeyValuePair<int, CombatStats2>>)(LoadedEntity.SkillStats.AsValueEnumerable().Where(x => x.Value.SkillType == ESkillType.Taken).OrderByDescending(x => x.Value.ValueTotal).ToList());
+                                skillStats = (IReadOnlyList<KeyValuePair<int, CombatStats>>)(LoadedEntity.SkillStats.AsValueEnumerable().Where(x => x.Value.SkillType == ESkillType.Taken).OrderByDescending(x => x.Value.ValueTotal).ToList());
                                 valueTotalColumnName = "Damage";
                                 valuePerSecondColumnName = "Total DPS";
                                 valueShareColumnName = "Total DMG %";
                                 valueExtraStatColumnName = "Deaths";
                                 break;
                             default:
-                                skillStats = (IReadOnlyList<KeyValuePair<int, CombatStats2>>)(LoadedEntity.SkillStats.AsValueEnumerable().Where(x => x.Value.SkillType == ESkillType.Damage).OrderByDescending(x => x.Value.ValueTotal).ToList());
+                                skillStats = (IReadOnlyList<KeyValuePair<int, CombatStats>>)(LoadedEntity.SkillStats.AsValueEnumerable().Where(x => x.Value.SkillType == ESkillType.Damage).OrderByDescending(x => x.Value.ValueTotal).ToList());
                                 valueTotalColumnName = "Damage";
                                 valuePerSecondColumnName = "Total DPS";
                                 valueShareColumnName = "Total DMG %";
@@ -880,7 +880,7 @@ namespace BPSR_ZDPS.Windows
                     if (ImGui.BeginListBox("##SkillStatsListBox"))
                     {
                         // Create a ReadOnlyList to try and avoid modification errors
-                        var skillStats = (IReadOnlyList<KeyValuePair<int, CombatStats2>>)(LoadedEntity.SkillStats.OrderByDescending(x => x.Value.ValueTotal).ToList());
+                        var skillStats = (IReadOnlyList<KeyValuePair<int, CombatStats>>)(LoadedEntity.SkillStats.OrderByDescending(x => x.Value.ValueTotal).ToList());
                         for (int i = 0; i < skillStats.Count; i++)
                         {
                             var stat = skillStats.ElementAt(i);

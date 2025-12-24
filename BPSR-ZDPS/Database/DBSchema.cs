@@ -123,13 +123,15 @@ namespace BPSR_ZDPS
         public static class DbData
         {
             public const string Select = @"SELECT * FROM DbData";
+            public const string Update = @"UPDATE DbData SET Version = @Version";
+            public const string Delete = @"DELETE FROM DbData";
 
             public const string CreateTable = @"
                 CREATE TABLE IF NOT EXISTS DbData (
                     Version REAL
                 );
 
-                INSERT INTO DbData (Version) VALUES (1.0)";
+                INSERT INTO DbData (Version) SELECT (1.1) WHERE NOT EXISTS (SELECT 1 FROM DbData)";
         }
 
         public static class EntityCache

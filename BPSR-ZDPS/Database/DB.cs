@@ -8,6 +8,7 @@ using System.Collections.Concurrent;
 using System.Data.Common;
 using System.Diagnostics;
 using System.Text;
+using static BPSR_ZDPS.DBSchema;
 
 namespace BPSR_ZDPS
 {
@@ -36,6 +37,8 @@ namespace BPSR_ZDPS
             DbConn.Open();
 
             DBSchema.CreateTables(DbConn);
+
+            CheckAndRunMigrations();
         }
 
         public static void CloseAndSave()
@@ -311,6 +314,61 @@ namespace BPSR_ZDPS
             Log.Information("UpdateEntityCacheLines took {elapsed} to insert {numLines}", sw.Elapsed, lines.Count());
 
             return result > 0;
+        }
+
+        public static void CheckAndRunMigrations()
+        {
+            var dbData = DbConn.Query<DbData>(DBSchema.DbData.Select).First();
+            if (dbData.Version <= 1.0)
+            {
+                RunDbMigration1();
+            }
+        }
+
+        public static void RunDbMigration1()
+        {
+            var encounters = DB.LoadEncounterSummaries();
+
+            Log.Information("Running DB Migration 1");
+            foreach (var encounter in encounters)
+            {
+                var entityBlob = DbConn.QuerySingleOrDefault<EntityBlobTable>(DBSchema.Entities.SelectByEncounterId, new { EncounterId = encounter.EncounterId });
+                using (var memStream = new MemoryStream(entityBlob.Data))
+                {
+                    using (var decompStream = new ZstdSharp.DecompressionStream(memStream))
+                    {
+                        using (var streamReader = new StreamReader(decompStream))
+                        {
+                            var txt = streamReader.ReadToEnd();
+                            txt = txt.Replace("BPSR-DeepsLib", "BPSR-ZDPSLib")
+                                .Replace("BPSR_ZDPS.CombatStats2, BPSR-ZDPS", "BPSR_ZDPS.CombatStats, BPSR-ZDPS");
+
+                            using (var memoryStream = new MemoryStream())
+                            {
+                                using (var compStream = new ZstdSharp.CompressionStream(memoryStream))
+                                {
+                                    using (var streamWriter = new StreamWriter(compStream, Encoding.UTF8, 1024, true))
+                                    {
+                                        streamWriter.Write(txt);
+                                        streamWriter.Flush();
+
+                                        var blob = new EntityBlobTable();
+                                        blob.EncounterId = encounter.EncounterId;
+                                        blob.Data = memoryStream.ToArray();
+                                        var result = DbConn.Execute("UPDATE Entities SET Data = @Data WHERE EncounterId = @EncounterId", blob);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            DbConn.Execute(DBSchema.DbData.Delete);
+            DbConn.Execute("INSERT INTO DbData (Version) SELECT (1.1)");
+            DbConn.Execute("VACUUM");
+
+            Log.Information("DB Migration 1 done");
         }
     }
 

@@ -872,11 +872,11 @@ namespace BPSR_ZDPS
         public int Level { get; set; } = 0;
         public Vector3 Position { get; private set; } = new();
 
-        public CombatStats2 DamageStats { get; set; } = new();
-        public CombatStats2 HealingStats { get; set; } = new();
-        public CombatStats2 TakenStats { get; set; } = new();
+        public CombatStats DamageStats { get; set; } = new();
+        public CombatStats HealingStats { get; set; } = new();
+        public CombatStats TakenStats { get; set; } = new();
 
-        public ConcurrentDictionary<int, CombatStats2> SkillStats { get; set; } = new();
+        public ConcurrentDictionary<int, CombatStats> SkillStats { get; set; } = new();
 
         public ulong TotalDamage { get; set; } = 0;
         public ulong TotalShieldBreak { get; set; } = 0;
@@ -915,14 +915,14 @@ namespace BPSR_ZDPS
         public object Clone()
         {
             var cloned = this.MemberwiseClone();
-            ((Entity)cloned).DamageStats = (CombatStats2)this.DamageStats.Clone();
-            ((Entity)cloned).HealingStats = (CombatStats2)this.HealingStats.Clone();
-            ((Entity)cloned).TakenStats = (CombatStats2)this.TakenStats.Clone();
+            ((Entity)cloned).DamageStats = (CombatStats)this.DamageStats.Clone();
+            ((Entity)cloned).HealingStats = (CombatStats)this.HealingStats.Clone();
+            ((Entity)cloned).TakenStats = (CombatStats)this.TakenStats.Clone();
             //((Entity)cloned).SkillStats.Clear();
             // This cursed loop ensures we dereference all the items and don't break the current encounter tracker
             foreach (var skillStat in this.SkillStats)
             {
-                ((Entity)cloned).SkillStats.AddOrUpdate(skillStat.Key, (CombatStats2)skillStat.Value.Clone(), (key, value) => (CombatStats2)skillStat.Value.Clone());
+                ((Entity)cloned).SkillStats.AddOrUpdate(skillStat.Key, (CombatStats)skillStat.Value.Clone(), (key, value) => (CombatStats)skillStat.Value.Clone());
             }
             return cloned;
         }
@@ -1145,7 +1145,7 @@ namespace BPSR_ZDPS
         {
             if (!SkillStats.TryGetValue(skillId, out var stats))
             {
-                var combatStats = new CombatStats2();
+                var combatStats = new CombatStats();
 
                 if (HelperMethods.DataTables.Skills.Data.TryGetValue(skillId.ToString(), out var skill))
                 {
@@ -1173,7 +1173,7 @@ namespace BPSR_ZDPS
         {
             if (!SkillStats.TryGetValue(skillId, out var stats))
             {
-                var combatStats = new CombatStats2();
+                var combatStats = new CombatStats();
 
                 combatStats.SetSkillType(skillType);
 
@@ -1389,7 +1389,7 @@ namespace BPSR_ZDPS
                 }
                 else
                 {
-                    SkillStats.TryAdd(newSkillStat.Key, (CombatStats2)newSkillStat.Value.Clone());
+                    SkillStats.TryAdd(newSkillStat.Key, (CombatStats)newSkillStat.Value.Clone());
                 }
             }
         }
@@ -1438,7 +1438,7 @@ namespace BPSR_ZDPS
         Taken = 3
     }
 
-    public class CombatStats2 : System.ICloneable
+    public class CombatStats : System.ICloneable
     {
         public string Name { get; private set; }
         public ESkillType SkillType { get; private set; } = ESkillType.Unknown;
@@ -1633,7 +1633,7 @@ namespace BPSR_ZDPS
         }
 
         // Merges the data from another Combat Stats with this one, always uses the new Name and SkillType
-        public void MergeCombatStats(CombatStats2 newCombatStats)
+        public void MergeCombatStats(CombatStats newCombatStats)
         {
             if (!string.IsNullOrEmpty(newCombatStats.Name))
             {
