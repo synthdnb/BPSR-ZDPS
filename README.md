@@ -15,7 +15,7 @@ If the game was already running when Npcap was installed, you will need to resta
 
 ZDPS is built on `.NET 9` and requires it to be installed. If you do not have it installed already, head over to the Microsoft website [here](https://dotnet.microsoft.com/en-us/download/dotnet/9.0). Download and install the `.NET Desktop Runtime 9.X.X` for `x64`.
 - Note: This not the SDK, or other "Runtime" versions on the site.
-- If you fail to install this before running ZDPS you will recieve a popup on launch prompting you to download it before it can be run.
+- If you fail to install this before running ZDPS you will receive a popup on launch prompting you to download it before it can be run.
 
 ### Installing ZDPS
 1. Download the latest release of ZDPS by heading over to the [Releases](https://github.com/Blue-Protocol-Source/BPSR-Deeps/releases) section and downloading the latest `ZDPS - Damage Meter.zip`
@@ -49,7 +49,7 @@ Many windows feature a number of buttons in the top right on their title bar. Wh
 > [!IMPORTANT]
 > ZDPS does not send any web requests or data to any services automatically. Any web requests or data you want to send must first be enabled in the Settings menu. As such, it is strongly recommended to first go through the [Settings menu](#Settings-Menu) when first using ZDPS to ensure you have configured it to your liking.
 >
-> This includes checking for updates.
+> This includes [checking for updates](#ZDPS-Update-Checking).
 
 For a more detailed breakdown of individual features in ZDPS, please see below:
 
@@ -95,7 +95,7 @@ The details included in this window the following and more:
 > Accessed from `Database Manager` on then Features menu.
 
 Since ZDPS features a local database, being able to manage how much content is stored in it is important. This allows direct realtime manual management of how much is actively in it. The Settings menu has options to allow automatic management of it though if you don't want to deal with manually clearing old data.
-- Note that while deleting all Encounters are possible, it is often times not needed thanks to the database compression that allows thousands of Encounters to be stored with minimal impact on system storagfe.
+- Note that while deleting all Encounters are possible, it is often times not needed thanks to the database compression that allows thousands of Encounters to be stored with minimal impact on system storage.
 
 ### Raid Manager
 To assist with Raid (Group) content, ZDPS has features tailored to those experiences.
@@ -167,15 +167,15 @@ To get results immediately, using the tool is very straight forward.
 1. With ZDPS running, log into your character, teleport to a new zone, or change Lines.
    - This will update your Module Inventory in ZDPS and save it to a local file so it can be used again without even having the game running.
 2. Open the Module Optimizer if it is not already open.
-3. Add any Stat Priorties you want for your build.
+3. Add any Stat Priorities you want for your build.
    - If you have a specific Stat that needs to be at least a specific level, enter it into the text box for that Stat. Such as `20` for `Armor` to ensure results given have that stat at 20 (or higher). If your requirement cannot be met, no result will be returned.
-     - Values here can range between `0` (meaing it can be anything) and go up to `20` (or higher if you really wanted to but it's unlikely you would have a match then). Keep in mind these are the values, not the Breakpoint Levels (lvl 1-6).
-   - You can use the Up and Down arrows on the left of each Stat Priority entry to shift their importance. Priorties closer to the top are weighted to be more valuable than those closer to the bottom of your list.
+     - Values here can range between `0` (meaning it can be anything) and go up to `20` (or higher if you really wanted to but it's unlikely you would have a match then). Keep in mind these are the values, not the Breakpoint Levels (lvl 1-6).
+   - You can use the Up and Down arrows on the left of each Stat Priority entry to shift their importance. Priorities closer to the top are weighted to be more valuable than those closer to the bottom of your list.
 4. Click the `Calculate` button at the bottom.
 5. Browse your results.
-   - The Top 10 results found based on your inventory contents and Stat Priorties will be shown.
+   - The Top 10 results found based on your inventory contents and Stat Priorities will be shown.
 
-If you wish to share your Stat Priorty list with other users, navigate over to the `Settings` tab within the window. Here you can copy your `Preset Share Code` for sending to others/posting online. Additionally, you can paste in a `Preset Share Code` from other users to instantly apply their setup to your window.
+If you wish to share your Stat Priority list with other users, navigate over to the `Settings` tab within the window. Here you can copy your `Preset Share Code` for sending to others/posting online. Additionally, you can paste in a `Preset Share Code` from other users to instantly apply their setup to your window.
 
 > [!NOTE]
 > You can also change the `Link Level Boosts` for the calculations in the lower part of the Settings menu. The changes here ARE NOT included in a `Preset Share Code`. Be mindful of this when sharing/using `Preset Share Codes` to ensure you are getting the expected results.
@@ -205,7 +205,7 @@ Below will be descriptions for some, but not all, of the settings contained with
 
 `Network Device`
 
-ZDPS will attempt to select the most likely network device on your machine as the deault selection to capture game data from. However, if you find no data appears in ZDPS, you may need to come here and change the selection.
+ZDPS will attempt to select the most likely network device on your machine as the default selection to capture game data from. However, if you find no data appears in ZDPS, you may need to come here and change the selection.
 
 `Game Capture Preference`
 
@@ -219,9 +219,15 @@ ZDPS supports setting Keybindings for specific features.
 
 Currently you are able to set a Keybinding for `Encounter Reset` and `Pinned Window Clickthrough`.
 
-As can be seen in the above screenshot of the Settings menu, the `Encounter Reset` Keybind (and button) are typically going to be unnessecary for ZDPS users as the tool is capable of detecting your Encounter states and splitting them automatically for you, including when you wipe.
+As can be seen in the above screenshot of the Settings menu, the `Encounter Reset` Keybind (and button) are typically going to be unnecessary for ZDPS users as the tool is capable of detecting your Encounter states and splitting them automatically for you, including when you wipe.
 
 In order to take advantage of having a window pinned on your screen, but interacting with the content behind it, you will want to setup a binding for `Pinned Window Clickthrough`. When you press this Keybind, any window which is Pinned will stop registering your input for it. To help identify when this mode is active, the `Pin` button will turn `Red` if Clickthrough is currently active. Otherwise it will be a white/grey color depending on Pinned state.
+
+##### ZDPS Update Checking
+ZDPS is capable of checking online for new versions and alerting you if one is found.
+
+> [!IMPORTANT]
+> As stated previously, ZDPS never sends any web requests or data without your permission first. That means Update Checking is _disabled_ by default. It is however recommended to enable this setting so you are always aware of when an update is available.
 
 #### Combat
 
