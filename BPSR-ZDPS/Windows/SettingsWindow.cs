@@ -19,9 +19,12 @@ namespace BPSR_ZDPS.Windows
         static int SelectedNetworkDeviceIdx = -1;
         static bool normalizeMeterContributions;
         static bool useShortWidthNumberFormatting;
+        static bool showClassIconsInMeters;
         static bool colorClassIconsByRole;
         static bool showSkillIconsInDetails;
         static bool onlyShowDamageContributorsInMeters;
+        static bool showAbilityScoreInMeters;
+        static bool showSubProfessionNameInMeters;
         static bool useAutomaticWipeDetection;
         static bool skipTeleportStateCheckInAutomaticWipeDetection;
         static bool splitEncountersOnNewPhases;
@@ -479,6 +482,17 @@ namespace BPSR_ZDPS.Windows
                         ImGui.BeginChild("##UserInterfaceTabContent", new Vector2(contentRegionAvail.X, contentRegionAvail.Y - 56), ImGuiChildFlags.Borders);
 
                         ImGui.SeparatorText("User Interface");
+
+                        ImGui.AlignTextToFramePadding();
+                        ImGui.Text("Show Class Icons In Meters: ");
+                        ImGui.SameLine();
+                        ImGui.Checkbox("##ShowClassIconsInMeters", ref showClassIconsInMeters);
+                        ImGui.Indent();
+                        ImGui.BeginDisabled(true);
+                        ImGui.TextWrapped("When enabled, class icons will be shown next to players in the meters.");
+                        ImGui.EndDisabled();
+                        ImGui.Unindent();
+
                         ImGui.AlignTextToFramePadding();
                         ImGui.Text("Color Class Icons By Role Type: ");
                         ImGui.SameLine();
@@ -506,6 +520,26 @@ namespace BPSR_ZDPS.Windows
                         ImGui.Indent();
                         ImGui.BeginDisabled(true);
                         ImGui.TextWrapped("When enabled, only players who have dealt damage will show in the DPS meter.");
+                        ImGui.EndDisabled();
+                        ImGui.Unindent();
+
+                        ImGui.AlignTextToFramePadding();
+                        ImGui.Text("Show Ability Score In Meters: ");
+                        ImGui.SameLine();
+                        ImGui.Checkbox("##ShowAbilityScoreInMeters", ref showAbilityScoreInMeters);
+                        ImGui.Indent();
+                        ImGui.BeginDisabled(true);
+                        ImGui.TextWrapped("When enabled, the Ability Score for players will be shown in the meters.");
+                        ImGui.EndDisabled();
+                        ImGui.Unindent();
+
+                        ImGui.AlignTextToFramePadding();
+                        ImGui.Text("Show Sub Profession Name In Meters: ");
+                        ImGui.SameLine();
+                        ImGui.Checkbox("##ShowSubProfessionNameInMeters", ref showSubProfessionNameInMeters);
+                        ImGui.Indent();
+                        ImGui.BeginDisabled(true);
+                        ImGui.TextWrapped("When enabled, allows showing the detected Sub Profession name in the meters. If no Sub Profession is detected, just the base class name is shown. If no base class is found, 'Unknown' is shown.");
                         ImGui.EndDisabled();
                         ImGui.Unindent();
 
@@ -1244,9 +1278,12 @@ namespace BPSR_ZDPS.Windows
         {
             normalizeMeterContributions = Settings.Instance.NormalizeMeterContributions;
             useShortWidthNumberFormatting = Settings.Instance.UseShortWidthNumberFormatting;
+            showClassIconsInMeters = Settings.Instance.ShowClassIconsInMeters;
             colorClassIconsByRole = Settings.Instance.ColorClassIconsByRole;
             showSkillIconsInDetails = Settings.Instance.ShowSkillIconsInDetails;
             onlyShowDamageContributorsInMeters = Settings.Instance.OnlyShowDamageContributorsInMeters;
+            showAbilityScoreInMeters = Settings.Instance.ShowAbilityScoreInMeters;
+            showSubProfessionNameInMeters = Settings.Instance.ShowSubProfessionNameInMeters;
             useAutomaticWipeDetection = Settings.Instance.UseAutomaticWipeDetection;
             skipTeleportStateCheckInAutomaticWipeDetection = Settings.Instance.SkipTeleportStateCheckInAutomaticWipeDetection;
             splitEncountersOnNewPhases = Settings.Instance.SplitEncountersOnNewPhases;
@@ -1321,9 +1358,12 @@ namespace BPSR_ZDPS.Windows
 
             Settings.Instance.NormalizeMeterContributions = normalizeMeterContributions;
             Settings.Instance.UseShortWidthNumberFormatting = useShortWidthNumberFormatting;
+            Settings.Instance.ShowClassIconsInMeters = showClassIconsInMeters;
             Settings.Instance.ColorClassIconsByRole = colorClassIconsByRole;
             Settings.Instance.ShowSkillIconsInDetails = showSkillIconsInDetails;
             Settings.Instance.OnlyShowDamageContributorsInMeters = onlyShowDamageContributorsInMeters;
+            Settings.Instance.ShowAbilityScoreInMeters = showAbilityScoreInMeters;
+            Settings.Instance.ShowSubProfessionNameInMeters = showSubProfessionNameInMeters;
             Settings.Instance.UseAutomaticWipeDetection = useAutomaticWipeDetection;
             Settings.Instance.SkipTeleportStateCheckInAutomaticWipeDetection = skipTeleportStateCheckInAutomaticWipeDetection;
             Settings.Instance.SplitEncountersOnNewPhases = splitEncountersOnNewPhases;

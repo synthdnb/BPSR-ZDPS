@@ -1,4 +1,5 @@
-﻿using BPSR_ZDPS.Windows;
+﻿using BPSR_ZDPS.DataTypes;
+using BPSR_ZDPS.Windows;
 using Hexa.NET.ImGui;
 using System;
 using System.Collections.Generic;
@@ -21,35 +22,46 @@ namespace BPSR_ZDPS.Meters
 
             ImGui.AlignTextToFramePadding();
 
-            float texSize = ImGui.GetItemRectSize().Y; // Most likely is 22
-            float offset = ImGui.CalcTextSize(number).X + (ImGui.GetStyle().ItemSpacing.X * 2) + (texSize + 2);
+            float texSize = ImGui.GetItemRectSize().Y;
+            float offset = ImGui.CalcTextSize(number).X;
+            if (Settings.Instance.ShowClassIconsInMeters)
+            {
+                offset += (ImGui.GetStyle().ItemSpacing.X * 2) + (texSize + 2);
+            }
+            else
+            {
+                offset += (ImGui.GetStyle().ItemSpacing.X);
+            }
 
             ImGui.SetCursorPosX(offset);
+            
             bool ret = ImGui.Selectable(name, false, ImGuiSelectableFlags.SpanAllColumns);
             ImGui.SameLine();
 
             ImGui.SetCursorPos(startPoint);
 
             ImGui.TextUnformatted(number);
-            ImGui.SameLine();
 
-            var tex = ImageHelper.GetTextureByKey($"Profession_{profession}_Slim");
-
-            if (tex == null)
+            if (Settings.Instance.ShowClassIconsInMeters)
             {
-                ImGui.Dummy(new Vector2(texSize, texSize));
-            }
-            else
-            {
-                var roleColor = DataTypes.Professions.RoleTypeColors(DataTypes.Professions.GetRoleFromBaseProfessionId(profession));
-
-                if (DataTypes.Settings.Instance.ColorClassIconsByRole)
+                ImGui.SameLine();
+                var tex = ImageHelper.GetTextureByKey($"Profession_{profession}_Slim");
+                if (tex == null)
                 {
-                    ImGui.ImageWithBg((ImTextureRef)tex, new Vector2(texSize, texSize), new Vector2(0, 0), new Vector2(1, 1), new Vector4(0, 0, 0, 0), roleColor);
+                    ImGui.Dummy(new Vector2(texSize, texSize));
                 }
                 else
                 {
-                    ImGui.Image((ImTextureRef)tex, new Vector2(texSize, texSize));
+                    var roleColor = DataTypes.Professions.RoleTypeColors(DataTypes.Professions.GetRoleFromBaseProfessionId(profession));
+
+                    if (DataTypes.Settings.Instance.ColorClassIconsByRole)
+                    {
+                        ImGui.ImageWithBg((ImTextureRef)tex, new Vector2(texSize, texSize), new Vector2(0, 0), new Vector2(1, 1), new Vector4(0, 0, 0, 0), roleColor);
+                    }
+                    else
+                    {
+                        ImGui.Image((ImTextureRef)tex, new Vector2(texSize, texSize));
+                    }
                 }
             }
 

@@ -97,8 +97,20 @@ namespace BPSR_ZDPS.Meters
                     ImGui.ProgressBar((float)contributionProgressBar / 100.0f, new Vector2(-1, 0), $"##TpsEntryContribution_{i}");
                     ImGui.PopStyleColor();
 
+                    string professionStr = $"-{profession}";
+                    if (!Settings.Instance.ShowSubProfessionNameInMeters)
+                    {
+                        professionStr = "";
+                    }
+
+                    string abilityScoreStr = $" ({entity.AbilityScore})";
+                    if (!Settings.Instance.ShowAbilityScoreInMeters)
+                    {
+                        abilityScoreStr = "";
+                    }
+
                     ImGui.SetCursorPos(startPoint);
-                    if (SelectableWithHintImage($" {(i + 1).ToString().PadLeft((playerList.Count() < 101 ? 2 : 3), '0')}.", $"{name}-{profession} ({entity.AbilityScore})##TpsEntry_{i}", tps_format, entity.ProfessionId))
+                    if (SelectableWithHintImage($" {(i + 1).ToString().PadLeft((playerList.Count() < 101 ? 2 : 3), '0')}.", $"{name}{professionStr}{abilityScoreStr}##TpsEntry_{i}", tps_format, entity.ProfessionId))
                     //if (SelectableWithHint($" {(i + 1).ToString().PadLeft((playerList.Count() < 101 ? 2 : 3), '0')}. {name}-{profession} ({entity.AbilityScore})##TpsEntry_{i}", tps_format))
                     {
                         mainWindow.entityInspector = new EntityInspector();
