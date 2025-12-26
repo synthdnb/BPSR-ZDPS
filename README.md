@@ -28,7 +28,7 @@ ZDPS is built on `.NET 9` and requires it to be installed. If you do not have it
 ## Features
 ZDPS has a very rich feature set which goes beyond what typical DPS Meters support but remains incredibly fast and memory efficient the entire time.
 > [!NOTE]
-> You can also run both Standalone and Steam game clients at the same time without causing data issues (you will need to specify which client to collect data from in the Settings menu).
+> You can also run both Standalone and Steam game clients at the same time without causing data issues (you will need to specify which client to collect data from in the [Settings menu](#-General-Tab)).
 
 When running ZDPS, Encounters are automatically split by "Phases." This means there's no need to remember to manually start new Encounters from a button, Keybind, or setup arbitrary "timeouts." As you clear dungeons, the mobbing/trash phase and the Boss phase will be automatically split into new Encounters to let you track each step without needing to remember to do anything. This applies to all content you do including Raids, Stimen Vault, Events, etc. If you happen to have a party wipe that will have the Encounter split automatically too!
 
@@ -209,7 +209,12 @@ ZDPS will attempt to select the most likely network device on your machine as th
 
 `Game Capture Preference`
 
-By default, ZDPS captures game data from the automatically detected running game process. However, some users may decide to run multiple version of the game at once (`Standalone` and `Steam`). In these cases, you will want to change this setting to be for the specific version you want to actually capture the data of. Otherwise both clients will send their data to ZDPS and result in incorrect data reporting.
+By default, ZDPS captures game data from the automatically detected running game process. However, some users may decide to run multiple version of the game at once (`Standalone`, `Steam`, `Epic`, etc.). In these cases, you will want to change this setting to be for the specific version you want to actually capture the data of. Otherwise both clients will send their data to ZDPS and result in incorrect data reporting.
+
+> [!IMPORTANT]
+> If your game platform/region is missing from the dropdown list, or game data is not being detected while set to `Auto`, you may need to use the `Custom` option. When this is selected, a new textbox will appear for you to enter the _name_ of your game executable (without the `.exe` extension). For example, this would be `BPSR_STEAM` if running on Steam. Your game executable is located next to a file named `GameAssembly.dll` in the game installation directory.
+>
+> If you need to make use of `Custom` please contact us with the executable name you are having to use, along with what platform/region it is for. By doing so we can add proper support to it in the dropdown list and in `Auto` detection.
 
 ##### Keybinds
 ZDPS supports setting Keybindings for specific features.
@@ -285,6 +290,9 @@ ZDPS has the ability to play alert notification sounds when specific events are 
 
 > [!NOTE]
 > If you do not want to change the volume level in ZDPS, you can use the Windows Volume Mixer to adjust the ZDPS volume - changing all sounds it plays at once. This however is not the recommended way of adjusting them.
+
+> [!TIP]
+> If you don't have a custom `MP3`/`WAV` file to use, but want a different sound, ZDPS has a few different audio files you can use located in the `Data/Audio` directory. The default file used for alerts is the `Data/Audio/LetsDoThis.mp3` file.
 
 #### Integrations
 
