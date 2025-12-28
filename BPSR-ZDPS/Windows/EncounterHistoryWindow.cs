@@ -308,7 +308,9 @@ namespace BPSR_ZDPS.Windows
                     {
                         if (ImGui.MenuItem("Is Wipe", encounters[SelectedEncounterIndex].IsWipe))
                         {
-                            encounters[SelectedEncounterIndex].SetWipeState(!encounters[SelectedEncounterIndex].IsWipe);
+                            var wipeState = !encounters[SelectedEncounterIndex].IsWipe;
+                            encounters[SelectedEncounterIndex].SetWipeState(wipeState);
+                            DB.UpdateEncounterWipeState(encounters[SelectedEncounterIndex].EncounterId, wipeState);
                         }
                         ImGui.EndMenu();
                     }

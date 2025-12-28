@@ -124,6 +124,16 @@ namespace BPSR_ZDPS
             }
         }
 
+        public static void UpdateEncounterWipeState(ulong encounterId, bool isWipe)
+        {
+            lock (DBLock)
+            {
+                DbConn.Execute(DBSchema.Encounter.UpdateIsWipe, new { EncounterId = encounterId, IsWipe = isWipe });
+            }
+
+            Log.Information("Updated {encounterId} IsWipe to: {isWipe}", encounterId, isWipe);
+        }
+
         public static Encounter? LoadEncounter(ulong encounterId)
         {
             var sw = Stopwatch.StartNew();

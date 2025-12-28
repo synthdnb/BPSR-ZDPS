@@ -30,6 +30,8 @@ namespace BPSR_ZDPS
                 );
                 SELECT last_insert_rowid();";
 
+            public const string UpdateIsWipe = @"UPDATE Encounters SET IsWipe = @IsWipe WHERE EncounterId = @EncounterId";
+
             public const string SelectAll = @"SELECT * FROM Encounters ORDER BY StartTime DESC";
             public const string SelectById = @"SELECT * FROM Encounters WHERE EncounterId = @EncounterId";
             public const string SelectByBattleId = 
