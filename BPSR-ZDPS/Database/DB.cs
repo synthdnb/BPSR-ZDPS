@@ -40,8 +40,6 @@ namespace BPSR_ZDPS
             DbConn.Open();
 
             DBSchema.CreateTables(DbConn);
-
-            CheckAndRunMigrations();
         }
 
         public static void CloseAndSave()
@@ -343,6 +341,14 @@ namespace BPSR_ZDPS
             Log.Information("UpdateEntityCacheLines took {elapsed} to insert {numLines}", sw.Elapsed, lines.Count());
 
             return result > 0;
+        }
+
+        public static bool CheckIfMigrationsNeeded()
+        {
+            var dbData = DbConn.Query<DbData>(DBSchema.DbData.Select).First();
+            var migrationsToRun = Migrations.Where(x => x.MinVersion >= dbData.Version).ToList();
+
+            return migrationsToRun.Count > 0;
         }
 
         public static void CheckAndRunMigrations()

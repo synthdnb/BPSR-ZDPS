@@ -30,6 +30,9 @@ namespace BPSR_ZDPS.Windows
         static bool HasPromptedUpdateWindow = false;
         static bool HasPromptedOneTimeEnableUpdateChecks = false;
 
+        static bool ProcessingDbWork = false;
+        static bool ResumeFromDbWork = false;
+
         List<MeterBase> Meters = new();
         public EntityInspector entityInspector = new();
         public bool IsTopMost = false;
@@ -46,6 +49,7 @@ namespace BPSR_ZDPS.Windows
 
             UpdateCheckPromptWindow.Draw(this);
             UpdateAvailableWindow.Draw(this);
+            DatabaseMigrationWindow.Draw(this);
             SettingsWindow.Draw(this);
             EncounterHistoryWindow.Draw(this);
             entityInspector.Draw(this);
@@ -136,9 +140,16 @@ namespace BPSR_ZDPS.Windows
                     }
                 }
 
-                if (MessageManager.NetCaptureDeviceName != "")
+                if (DB.CheckIfMigrationsNeeded())
                 {
-                    MessageManager.InitializeCapturing();
+                    ProcessingDbWork = true;
+                }
+                else
+                {
+                    if (MessageManager.NetCaptureDeviceName != "")
+                    {
+                        MessageManager.InitializeCapturing();
+                    }
                 }
 
                 Meters.Add(new DpsMeter());
@@ -164,6 +175,7 @@ namespace BPSR_ZDPS.Windows
                 Settings.Instance.ApplyHotKeys(this);
 
                 Utils.SetCurrentWindowIcon();
+                Utils.BringWindowToFront();
 
                 if (Settings.Instance.External.BPTimerSettings.ExternalBPTimerEnabled)
                 {
@@ -174,15 +186,42 @@ namespace BPSR_ZDPS.Windows
                     }
                 }
 
+                if (ProcessingDbWork)
+                {
+                    DatabaseMigrationWindow.Open();
+                    Task.Run(() =>
+                    {
+                        DB.CheckAndRunMigrations();
+                    });
+                }
+                else
+                {
+                    if (Settings.Instance.CheckForZDPSUpdatesOnStartup)
+                    {
+                        Web.WebManager.CheckForZDPSUpdates();
+                    }
+
+                    if (!Settings.Instance.HasPromptedEnableUpdateChecks && !HasPromptedOneTimeEnableUpdateChecks && !Settings.Instance.CheckForZDPSUpdatesOnStartup)
+                    {
+                        HasPromptedOneTimeEnableUpdateChecks = true;
+                        UpdateCheckPromptWindow.Open();
+                    }
+                }
+            }
+
+            if (ResumeFromDbWork)
+            {
+                ProcessingDbWork = false;
+                ResumeFromDbWork = false;
+                Utils.BringWindowToFront();
+                if (MessageManager.NetCaptureDeviceName != "")
+                {
+                    MessageManager.InitializeCapturing();
+                }
+
                 if (Settings.Instance.CheckForZDPSUpdatesOnStartup)
                 {
                     Web.WebManager.CheckForZDPSUpdates();
-                }
-
-                if (!Settings.Instance.HasPromptedEnableUpdateChecks && !HasPromptedOneTimeEnableUpdateChecks && !Settings.Instance.CheckForZDPSUpdatesOnStartup)
-                {
-                    HasPromptedOneTimeEnableUpdateChecks = true;
-                    UpdateCheckPromptWindow.Open();
                 }
             }
 
@@ -533,6 +572,11 @@ namespace BPSR_ZDPS.Windows
         public void ToggleMouseClickthrough()
         {
             AppState.MousePassthrough = !AppState.MousePassthrough;
+        }
+
+        public void SetDbWorkComplete()
+        {
+            ResumeFromDbWork = true;
         }
     }
 
