@@ -1,15 +1,13 @@
 ﻿using BPSR_ZDPS.Database;
+using BPSR_ZDPS.Database.Migrations;
 using BPSR_ZDPS.DataTypes;
 using Dapper;
 using Microsoft.Data.Sqlite;
 using Newtonsoft.Json;
 using Serilog;
 using System.Collections.Concurrent;
-using System.Data.Common;
 using System.Diagnostics;
 using System.Text;
-using static BPSR_ZDPS.DBSchema;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BPSR_ZDPS
 {
@@ -17,12 +15,16 @@ namespace BPSR_ZDPS
     {
         public const string DbFileName = "ZDatabase.db";
         public static string DbFilePath = Path.Combine(Utils.DATA_DIR_NAME, DbFileName);
+        public static MigrationStatus MigrationStatus = new MigrationStatus();
 
         private static SqliteConnection DbConn;
         private static ILogger Log;
         private static ZstdSharp.Compressor Compressor = new ZstdSharp.Compressor();
         private static ZstdSharp.Decompressor Decompressor = new ZstdSharp.Decompressor();
         private static object DBLock = new object();
+        private static readonly List<BaseMigration> Migrations = [
+                new NamespaceMigration_1()
+            ];
 
         public static void Init()
         {
@@ -346,62 +348,42 @@ namespace BPSR_ZDPS
         public static void CheckAndRunMigrations()
         {
             var dbData = DbConn.Query<DbData>(DBSchema.DbData.Select).First();
-            if (dbData.Version <= 1.0)
-            {
-                RunDbMigration1();
-            }
-        }
+            var migrationsToRun = Migrations.Where(x => x.MinVersion >= dbData.Version).ToList();
 
-        public static void RunDbMigration1()
-        {
-            var encounters = DB.LoadEncounterSummaries();
-
-            Log.Information("Running DB Migration 1");
-            var tx = DbConn.BeginTransaction();
-            foreach (var encounter in encounters)
+            if (migrationsToRun.Count() > 0)
             {
-                var entityBlob = DbConn.QuerySingleOrDefault<EntityBlobTable>(DBSchema.Entities.SelectByEncounterId, new { EncounterId = encounter.EncounterId }, tx);
-                using (var memStream = new MemoryStream(entityBlob.Data))
+                Log.Information("{NumMigrations} Migrations to run", migrationsToRun.Count());
+                MigrationStatus.State = MigrationStatusState.Running;
+                MigrationStatus.TotalMigrationsNeeded = migrationsToRun.Count();
+                MigrationStatus.CurrentMigrationNum = 0;
+
+                foreach (var migration in migrationsToRun)
                 {
-                    using (var decompStream = new ZstdSharp.DecompressionStream(memStream))
+                    MigrationStatus.CurrentMigrationNum++;
+                    MigrationStatus.CurrentMigration = migration;
+                    Log.Information("Starting migration {Num}, {Name}, {Description}", MigrationStatus.CurrentMigrationNum, migration.Name, migration.Description);
+                    var tx = DbConn.BeginTransaction();
+                    var result = migration.RunMigration(DbConn, tx);
+                    if (!result)
                     {
-                        using (var streamReader = new StreamReader(decompStream))
-                        {
-                            var txt = streamReader.ReadToEnd();
-                            var sb = new StringBuilder(txt);
-                            sb.Replace("BPSR-DeepsLib", "BPSR-ZDPSLib");
-                            sb.Replace("BPSR_ZDPS.CombatStats2, BPSR-ZDPS", "BPSR_ZDPS.CombatStats, BPSR-ZDPS");
-
-                            using (var memoryStream = new MemoryStream())
-                            {
-                                using (var compStream = new ZstdSharp.CompressionStream(memoryStream))
-                                {
-                                    using (var streamWriter = new StreamWriter(compStream, Encoding.UTF8, 1024, true))
-                                    {
-                                        streamWriter.Write(sb.ToString());
-                                        streamWriter.Flush();
-                                    }
-                                    compStream.Flush();
-                                }
-                                memoryStream.Flush();
-
-                                var blob = new EntityBlobTable();
-                                blob.EncounterId = encounter.EncounterId;
-                                blob.Data = memoryStream.ToArray();
-                                var result = DbConn.Execute("UPDATE Entities SET Data = @Data WHERE EncounterId = @EncounterId", blob, tx);
-                            }
-                        }
+                        Log.Error("Error running migration: {Name}", migration.Name);
+                        MigrationStatus.State = MigrationStatusState.Error;
+                        MigrationStatus.ErrorMsg = migration.ErrorMsg;
+                        tx.Rollback();
+                    }
+                    else
+                    {
+                        DbConn.Execute(DBSchema.DbData.Update, new { Version = migration.NewVersion }, tx);
+                        tx.Commit();
+                        Log.Information("Migration {Num} {Name} Ran, Updated to version {Version}", MigrationStatus.CurrentMigrationNum, migration.Name, migration.NewVersion);
                     }
                 }
+
+                Log.Information("Migrations ran, cleaning up.");
+                DbConn.Execute("VACUUM");
             }
 
-            DbConn.Execute(DBSchema.DbData.Delete, tx);
-            DbConn.Execute("INSERT INTO DbData (Version) SELECT (1.1)", tx);
-            tx.Commit();
-
-            DbConn.Execute("VACUUM");
-
-            Log.Information("DB Migration 1 done");
+            MigrationStatus.State = MigrationStatusState.Done;
         }
     }
 
