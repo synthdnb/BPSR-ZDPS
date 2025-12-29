@@ -227,9 +227,16 @@ namespace BPSR_ZDPS.Windows
                                             trackedSkill.TierCheckTime = DateTime.Now;
                                             System.Diagnostics.Debug.WriteLine($"Checking {trackedEntity.Key} for skill {trackedSkill.SkillId} tiers...");
                                             var ent = EncounterManager.Current.GetOrCreateEntity(trackedEntity.Key);
-                                            if (ent.SkillStats.TryGetValue(trackedSkill.SkillId, out var skillStats))
+                                            if (ent.SkillMetrics.TryGetValue(trackedSkill.SkillId, out var container))
                                             {
-                                                trackedSkill.SkillTier = skillStats.TierLevel;
+                                                int damageTierLevel = container.Damage.TierLevel;
+                                                int healingTierLevel = container.Healing.TierLevel;
+
+                                                trackedSkill.SkillTier = damageTierLevel;
+                                                if (healingTierLevel > damageTierLevel)
+                                                {
+                                                    trackedSkill.SkillTier = healingTierLevel;
+                                                }
 
                                                 // Only Imagines currently should have their cooldowns reduced based on Tier level
                                                 if (HelperMethods.DataTables.Skills.Data.TryGetValue(trackedSkill.SkillId.ToString(), out var skill))
@@ -258,7 +265,12 @@ namespace BPSR_ZDPS.Windows
                                     var textSize = ImGui.CalcTextSize(displayText);
                                     float progressBarWidth = ImGui.GetContentRegionAvail().X - indentOffset;
                                     float labelX = cursorPos.X + (progressBarWidth - textSize.X) * textAlignment;
-                                    float remainingPct = (float)Math.Round(remainingTime.TotalSeconds / trackedSkill.CooldownReduced ?? trackedSkill.SkillCooldownDefined, 4);
+                                    float totalCooldown = trackedSkill.SkillCooldownDefined;
+                                    if (trackedSkill.CooldownReduced != null && trackedSkill.CooldownReduced > 0)
+                                    {
+                                        totalCooldown = trackedSkill.CooldownReduced.Value;
+                                    }
+                                    float remainingPct = (float)Math.Round(remainingTime.TotalSeconds / totalCooldown, 4);
                                     ImGui.PushStyleColor(ImGuiCol.PlotHistogram, Colors.DarkRed);
                                     ImGui.ProgressBar(remainingPct, new Vector2(progressBarWidth, 18), "");
                                     ImGui.PopStyleColor();
@@ -330,7 +342,15 @@ namespace BPSR_ZDPS.Windows
                         ImGui.PushItemWidth(ImGui.GetContentRegionAvail().X);
                         if (ImGui.InputText("##EntityFilterText", ref EntityNameFilter, 64))
                         {
-                            EntityFilterMatches = EntityCache.Instance.Cache.Lines.AsValueEnumerable().Where(x => x.Value.Name != null && x.Value.Name.Contains(EntityNameFilter, StringComparison.OrdinalIgnoreCase)).ToArray();
+                            if (EntityNameFilter.Length > 0)
+                            {
+                                bool isNum = Char.IsNumber(EntityNameFilter[0]);
+                                EntityFilterMatches = EntityCache.Instance.Cache.Lines.AsValueEnumerable().Where(x => isNum ? x.Value.UID.ToString().Contains(EntityNameFilter) : x.Value.Name != null && x.Value.Name.Contains(EntityNameFilter, StringComparison.OrdinalIgnoreCase)).ToArray();
+                            }
+                            else
+                            {
+                                EntityFilterMatches = null;
+                            }
                         }
                         // Require at least 3 characters to perform our search to maintain performance against large lists
                         if (ImGui.BeginListBox("##FilteredEntitiesListBox", new Vector2(ImGui.GetContentRegionAvail().X, 120)))

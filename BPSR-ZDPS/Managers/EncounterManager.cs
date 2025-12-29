@@ -146,6 +146,22 @@ namespace BPSR_ZDPS
                     newChar.SetHpValuesNoUpdate(priorChar.Value.Hp, priorChar.Value.MaxHp);
                     newChar.Attributes = priorChar.Value.Attributes.ToDictionary();
                 }
+                
+                if (reason == EncounterStartReason.NewObjective)
+                {
+                    // Only pull through Bosses if it's a New Objective as that's where data for them can actually get lost when creating a new Encounter
+                    // Wipes and Restarts _should_ result in having the Boss fully retransmit all data to the client and make this not needed
+                    var priorBosses = priorEncounter.Entities.AsValueEnumerable().Where(x => x.Value.EntityType == EEntityType.EntMonster && x.Value.MonsterType == EMonsterType.Boss);
+                    foreach (var priorBoss in priorBosses)
+                    {
+                        if (priorBoss.Value.Hp > 0)
+                        {
+                            var newBoss = Current.GetOrCreateEntity(priorBoss.Key);
+                            newBoss.SetHpValuesNoUpdate(priorBoss.Value.Hp, priorBoss.Value.MaxHp);
+                            newBoss.Attributes = priorBoss.Value.Attributes.ToDictionary();
+                        }
+                    }
+                }
             }
             if (reason == EncounterStartReason.NewObjective)
             {
@@ -633,9 +649,10 @@ namespace BPSR_ZDPS
                 var skillId = summoned.GetAttrKV("AttrSkillId");
                 if (skillId != null)
                 {
-                    if (GetOrCreateEntity((long)caster).SkillStats.TryGetValue((int)skillId, out var skill))
+                    if (GetOrCreateEntity((long)caster).SkillMetrics.TryGetValue((int)skillId, out var container))
                     {
-                        skill.SetSummonData(summoned.UUID, (int)level);
+                        container.Damage.SetSummonData(summoned.UUID, (int)level);
+                        container.Healing.SetSummonData(summoned.UUID, (int)level);
                     }
                 }
             }
@@ -940,6 +957,7 @@ namespace BPSR_ZDPS
         public CombatStats TakenStats { get; set; } = new();
 
         public ConcurrentDictionary<int, CombatStats> SkillStats { get; set; } = new();
+        public ConcurrentDictionary<int, MetricsContainer> SkillMetrics { get; set; } = new();
 
         public ulong TotalDamage { get; set; } = 0;
         public ulong TotalShieldBreak { get; set; } = 0;
@@ -983,9 +1001,15 @@ namespace BPSR_ZDPS
             ((Entity)cloned).TakenStats = (CombatStats)this.TakenStats.Clone();
             //((Entity)cloned).SkillStats.Clear();
             // This cursed loop ensures we dereference all the items and don't break the current encounter tracker
-            foreach (var skillStat in this.SkillStats)
+            foreach (var container in this.SkillMetrics)
             {
-                ((Entity)cloned).SkillStats.AddOrUpdate(skillStat.Key, (CombatStats)skillStat.Value.Clone(), (key, value) => (CombatStats)skillStat.Value.Clone());
+                var metrics = new MetricsContainer
+                {
+                    Damage = (CombatStats)container.Value.Damage.Clone(),
+                    Healing = (CombatStats)container.Value.Healing.Clone(),
+                    Taken = (CombatStats)container.Value.Taken.Clone()
+                };
+                ((Entity)cloned).SkillMetrics.AddOrUpdate(container.Key, metrics, (key, value) => metrics);
             }
             return cloned;
         }
@@ -1212,21 +1236,23 @@ namespace BPSR_ZDPS
 
         public void RegisterSkillActivation(int skillId)
         {
-            if (!SkillStats.TryGetValue(skillId, out var stats))
+            if (!SkillMetrics.TryGetValue(skillId, out var container))
             {
-                var combatStats = new CombatStats();
+                container = new();
 
                 if (HelperMethods.DataTables.Skills.Data.TryGetValue(skillId.ToString(), out var skill))
                 {
-                    combatStats.SetName(skill.Name);
+                    container.Damage.SetName(skill.Name);
+                    container.Healing.SetName(skill.Name);
                 }
 
-                combatStats.RegisterActivation();
-                SkillStats.TryAdd(skillId, combatStats);
+                container.Damage.RegisterActivation();
+                container.Healing.RegisterActivation();
             }
             else
             {
-                stats.RegisterActivation();
+                container.Damage.RegisterActivation();
+                container.Healing.RegisterActivation();
             }
 
             TotalCasts++;
@@ -1240,7 +1266,7 @@ namespace BPSR_ZDPS
 
         public void RegisterSkillData(ESkillType skillType, int skillId, int skillLevel, long value, bool isCrit, bool isLucky, long hpLessenValue, bool isCauseLucky, EDamageProperty damageElement, EDamageType damageType, EDamageMode damageMode, bool isDead, ExtraPacketData extraPacketData)
         {
-            if (!SkillStats.TryGetValue(skillId, out var stats))
+            if(!SkillMetrics.TryGetValue(skillId, out var container))
             {
                 var combatStats = new CombatStats();
 
@@ -1252,12 +1278,54 @@ namespace BPSR_ZDPS
                 }
 
                 combatStats.AddData(value, skillLevel, isCrit, isLucky, hpLessenValue, isCauseLucky, damageElement, damageType, damageMode, isDead, extraPacketData);
-                SkillStats.TryAdd(skillId, combatStats);
+
+                container = new();
+                if (skillType == ESkillType.Damage)
+                {
+                    container.Damage = combatStats;
+                }
+                else if (skillType == ESkillType.Healing)
+                {
+                    container.Healing = combatStats;
+                }
+                else if (skillType == ESkillType.Taken)
+                {
+                    container.Taken = combatStats;
+                }
+                else
+                {
+                    Serilog.Log.Warning($"RegisterSkillData SkillId {skillId} was an Unknown skill type and was not registered.");
+                }
+                
+                SkillMetrics.TryAdd(skillId, container);
             }
             else
             {
-                stats.SetSkillType(skillType);
-                stats.AddData(value, skillLevel, isCrit, isLucky, hpLessenValue, isCauseLucky, damageElement, damageType, damageMode, isDead, extraPacketData);
+                CombatStats combatStats;
+                if (skillType == ESkillType.Damage)
+                {
+                    combatStats = container.Damage;
+                }
+                else if (skillType == ESkillType.Healing)
+                {
+                    combatStats = container.Healing;
+                }
+                else if (skillType == ESkillType.Taken)
+                {
+                    combatStats = container.Taken;
+                }
+                else
+                {
+                    combatStats = new();
+                    Serilog.Log.Warning($"RegisterSkillData SkillId {skillId} was an Unknown skill type and was not updated.");
+                }
+
+                if (string.IsNullOrEmpty(combatStats.Name) && HelperMethods.DataTables.Skills.Data.TryGetValue(skillId.ToString(), out var skill))
+                {
+                    combatStats.SetName(skill.Name);
+                }
+
+                combatStats.AddData(value, skillLevel, isCrit, isLucky, hpLessenValue, isCauseLucky, damageElement, damageType, damageMode, isDead, extraPacketData);
             }
         }
 
@@ -1455,17 +1523,25 @@ namespace BPSR_ZDPS
                 }
             }
 
-            // Merge SkillStats
-            foreach (var newSkillStat in newEntity.SkillStats)
+            // Merge SkillMetrics
+            foreach (var newSkillMetrics in newEntity.SkillMetrics)
             {
-                SkillStats.TryGetValue(newSkillStat.Key, out var foundSkill);
+                SkillMetrics.TryGetValue(newSkillMetrics.Key, out var foundSkill);
                 if (foundSkill != null)
                 {
-                    foundSkill.MergeCombatStats(newSkillStat.Value);
+                    foundSkill.Damage.MergeCombatStats(newSkillMetrics.Value.Damage);
+                    foundSkill.Healing.MergeCombatStats(newSkillMetrics.Value.Healing);
+                    foundSkill.Taken.MergeCombatStats(newSkillMetrics.Value.Taken);
                 }
                 else
                 {
-                    SkillStats.TryAdd(newSkillStat.Key, (CombatStats)newSkillStat.Value.Clone());
+                    var metrics = new MetricsContainer
+                    {
+                        Damage = (CombatStats)newSkillMetrics.Value.Damage.Clone(),
+                        Healing = (CombatStats)newSkillMetrics.Value.Healing.Clone(),
+                        Taken = (CombatStats)newSkillMetrics.Value.Taken.Clone(),
+                    };
+                    SkillMetrics.TryAdd(newSkillMetrics.Key, metrics);
                 }
             }
         }
@@ -1512,6 +1588,13 @@ namespace BPSR_ZDPS
         Damage = 1,
         Healing = 2,
         Taken = 3
+    }
+
+    public class MetricsContainer
+    {
+        public CombatStats Damage = new();
+        public CombatStats Healing = new();
+        public CombatStats Taken = new();
     }
 
     public class CombatStats : System.ICloneable
@@ -1654,9 +1737,14 @@ namespace BPSR_ZDPS
                     AddCritValue(value);
                 }
 
-                if (isLucky)
+                // We only increment on IsCauseLucky as that is the original skill which created the Lucky Strike
+                // IsLucky only is true when this is the additional attack created for the Lucky Strike to be dealt
+                if (isCauseLucky)
                 {
                     LuckyCount++;
+                }
+                if (isLucky)
+                {
                     AddLuckyValue(value);
                 }
 
@@ -1665,7 +1753,7 @@ namespace BPSR_ZDPS
                     NormalCount++;
                     AddNormalValue(value);
                 }
-                else
+                else if (isCrit && isLucky)
                 {
                     CritLuckyCount++;
                 }

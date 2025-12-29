@@ -433,26 +433,26 @@ namespace BPSR_ZDPS.Windows
                         switch (TableFilterMode)
                         {
                             case ETableFilterMode.SkillsDamage:
-                                skillStats = (IReadOnlyList<KeyValuePair<int, CombatStats>>)(LoadedEntity.SkillStats.AsValueEnumerable().Where(x => x.Value.SkillType == ESkillType.Damage).OrderByDescending(x => x.Value.ValueTotal).ToList());
+                                skillStats = (IReadOnlyList<KeyValuePair<int, CombatStats>>)(LoadedEntity.SkillMetrics.AsValueEnumerable().Where(x => x.Value.Damage.ValueTotal > 0).OrderByDescending(x => x.Value.Damage.ValueTotal).Select(x => new KeyValuePair<int, CombatStats>(x.Key, x.Value.Damage)).ToList());
                                 valueTotalColumnName = "Damage";
                                 valuePerSecondColumnName = "Total DPS";
                                 valueShareColumnName = "Total DMG %";
                                 break;
                             case ETableFilterMode.SkillsHealing:
-                                skillStats = (IReadOnlyList<KeyValuePair<int, CombatStats>>)(LoadedEntity.SkillStats.AsValueEnumerable().Where(x => x.Value.SkillType == ESkillType.Healing).OrderByDescending(x => x.Value.ValueTotal).ToList());
+                                skillStats = (IReadOnlyList<KeyValuePair<int, CombatStats>>)(LoadedEntity.SkillMetrics.AsValueEnumerable().Where(x => x.Value.Healing.ValueTotal > 0).OrderByDescending(x => x.Value.Healing.ValueTotal).Select(x => new KeyValuePair<int, CombatStats>(x.Key, x.Value.Healing)).ToList());
                                 valueTotalColumnName = "Healing";
                                 valuePerSecondColumnName = "Total HPS";
                                 valueShareColumnName = "Total HEAL %";
                                 break;
                             case ETableFilterMode.SkillsTaken:
-                                skillStats = (IReadOnlyList<KeyValuePair<int, CombatStats>>)(LoadedEntity.SkillStats.AsValueEnumerable().Where(x => x.Value.SkillType == ESkillType.Taken).OrderByDescending(x => x.Value.ValueTotal).ToList());
+                                skillStats = (IReadOnlyList<KeyValuePair<int, CombatStats>>)(LoadedEntity.SkillMetrics.AsValueEnumerable().Where(x => x.Value.Taken.ValueTotal > 0).OrderByDescending(x => x.Value.Taken.ValueTotal).Select(x => new KeyValuePair<int, CombatStats>(x.Key, x.Value.Taken)).ToList());
                                 valueTotalColumnName = "Damage";
                                 valuePerSecondColumnName = "Total DPS";
                                 valueShareColumnName = "Total DMG %";
                                 valueExtraStatColumnName = "Deaths";
                                 break;
                             default:
-                                skillStats = (IReadOnlyList<KeyValuePair<int, CombatStats>>)(LoadedEntity.SkillStats.AsValueEnumerable().Where(x => x.Value.SkillType == ESkillType.Damage).OrderByDescending(x => x.Value.ValueTotal).ToList());
+                                skillStats = (IReadOnlyList<KeyValuePair<int, CombatStats>>)(LoadedEntity.SkillMetrics.AsValueEnumerable().Where(x => x.Value.Damage.ValueTotal > 0).OrderByDescending(x => x.Value.Damage.ValueTotal).Select(x => new KeyValuePair<int, CombatStats>(x.Key, x.Value.Damage)).ToList());
                                 valueTotalColumnName = "Damage";
                                 valuePerSecondColumnName = "Total DPS";
                                 valueShareColumnName = "Total DMG %";
@@ -545,9 +545,21 @@ namespace BPSR_ZDPS.Windows
 
                             ImGui.TableNextColumn();
                             ImGui.TextUnformatted($"{stat.Value.HitsCount}");
-                            if (stat.Value.ImmuneCount > 0)
+                            if (stat.Value.ImmuneCount > 0 || stat.Value.LuckyCount > 0)
                             {
-                                ImGui.SetItemTooltip($"Immune Count: {stat.Value.ImmuneCount}");
+                                string immuneString = "";
+                                if (stat.Value.ImmuneCount > 0)
+                                {
+                                    immuneString = $"Immune Count: {stat.Value.ImmuneCount}";
+                                }
+
+                                string luckyString = "";
+                                if (stat.Value.LuckyCount > 0)
+                                {
+                                    luckyString = $"{(string.IsNullOrEmpty(immuneString) ? "" : "\n")}Lucky Count: {stat.Value.LuckyCount}";
+                                }
+
+                                ImGui.SetItemTooltip($"{immuneString}{luckyString}");
                             }
 
                             ImGui.TableNextColumn();
@@ -824,8 +836,8 @@ namespace BPSR_ZDPS.Windows
                                 lastAdded = lastAdded + value;
                             }
 
-                            SkillSnapshotsNames = LoadedEntity.SkillStats.AsValueEnumerable().Select(x => x.Value.Name ?? "").ToArray();
-                            SkillSnapshotsHits = LoadedEntity.SkillStats.AsValueEnumerable().Select(x => (float)x.Value.HitsCount).ToArray();
+                            SkillSnapshotsNames = LoadedEntity.SkillMetrics.AsValueEnumerable().Select(x => x.Value.Damage.Name ?? "").ToArray();
+                            SkillSnapshotsHits = LoadedEntity.SkillMetrics.AsValueEnumerable().Select(x => (float)x.Value.Damage.HitsCount).ToArray();
                         }
 
                         if (ImPlot.BeginPlot("Total Damage Over Time"))
@@ -888,26 +900,6 @@ namespace BPSR_ZDPS.Windows
                 {
                     ImGui.TextUnformatted($"UUID: {LoadedEntity.UUID}");
                     ImGui.TextUnformatted($"MonsterType: {LoadedEntity.MonsterType}");
-
-                    ImGui.TextUnformatted("Skill Stats:");
-                    ImGui.SetNextItemWidth(-1);
-                    if (ImGui.BeginListBox("##SkillStatsListBox"))
-                    {
-                        // Create a ReadOnlyList to try and avoid modification errors
-                        var skillStats = (IReadOnlyList<KeyValuePair<int, CombatStats>>)(LoadedEntity.SkillStats.OrderByDescending(x => x.Value.ValueTotal).ToList());
-                        for (int i = 0; i < skillStats.Count; i++)
-                        {
-                            var stat = skillStats.ElementAt(i);
-                            int skillId = stat.Key;
-
-                            string display = $"[{i}] {skillId}";
-                            display = $"{display}\nValueTotal:{stat.Value.ValueTotal}\nSkillType:{stat.Value.SkillType}\nCastsCount:{stat.Value.CastsCount}";
-
-                            ImGui.TextUnformatted($"{display}");
-                        }
-
-                        ImGui.EndListBox();
-                    }
                 }
 
                 ImGui.End();
