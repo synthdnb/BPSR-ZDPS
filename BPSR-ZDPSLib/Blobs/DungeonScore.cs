@@ -1,6 +1,6 @@
 ﻿using Zproto;
 
-namespace BPSR_DeepsLib.Blobs;
+namespace BPSR_ZDPSLib.Blobs;
 
 public class DungeonScore(BlobReader blob) : BlobType(ref blob)
 {

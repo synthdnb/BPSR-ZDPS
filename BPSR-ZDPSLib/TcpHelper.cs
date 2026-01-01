@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Runtime.InteropServices;
 
-namespace BPSR_DeepsLib;
+namespace BPSR_ZDPSLib;
 
 public static class TcpHelper {
 

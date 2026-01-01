@@ -478,7 +478,7 @@ namespace BPSR_ZDPS.Windows
 
         static void CenterDisplay()
         {
-            var gameProc = BPSR_DeepsLib.Utils.GetCachedProcessEntry();
+            var gameProc = BPSR_ZDPSLib.Utils.GetCachedProcessEntry();
             if (gameProc != null && gameProc.ProcessId > 0 && !string.IsNullOrEmpty(gameProc.ProcessName))
             {
                 try
@@ -519,7 +519,7 @@ namespace BPSR_ZDPS.Windows
 
         static void DefaultSize()
         {
-            var gameProc = BPSR_DeepsLib.Utils.GetCachedProcessEntry();
+            var gameProc = BPSR_ZDPSLib.Utils.GetCachedProcessEntry();
             if (gameProc != null && gameProc.ProcessId > 0 && !string.IsNullOrEmpty(gameProc.ProcessName))
             {
                 try

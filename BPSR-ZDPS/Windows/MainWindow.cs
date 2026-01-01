@@ -1,4 +1,4 @@
-﻿using BPSR_DeepsLib;
+﻿using BPSR_ZDPSLib;
 using BPSR_ZDPS.Meters;
 using Hexa.NET.ImGui;
 using Serilog;

@@ -1,4 +1,4 @@
-﻿namespace BPSR_DeepsLib.ServiceMethods;
+﻿namespace BPSR_ZDPSLib.ServiceMethods;
 
 public enum WorldNtf
 {

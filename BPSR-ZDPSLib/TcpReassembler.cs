@@ -6,7 +6,7 @@ using PacketDotNet;
 using Serilog;
 using SharpPcap;
 
-namespace BPSR_DeepsLib;
+namespace BPSR_ZDPSLib;
 
 public class TcpReassembler
 {

@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace BPSR_DeepsLib.Blobs;
+namespace BPSR_ZDPSLib.Blobs;
 
 public class BlobType
 {

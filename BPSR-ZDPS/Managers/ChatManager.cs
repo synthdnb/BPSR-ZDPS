@@ -1,4 +1,4 @@
-﻿using BPSR_DeepsLib;
+﻿using BPSR_ZDPSLib;
 using BPSR_ZDPS.DataTypes;
 using BPSR_ZDPS.DataTypes.Chat;
 using System.Collections.Concurrent;

@@ -1,4 +1,4 @@
-﻿namespace BPSR_DeepsLib;
+﻿namespace BPSR_ZDPSLib;
 
 public class TcpConnStatus
 {

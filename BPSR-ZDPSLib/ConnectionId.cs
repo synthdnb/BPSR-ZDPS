@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace BPSR_DeepsLib
+namespace BPSR_ZDPSLib
 {
     public class ConnectionId(string srcIp, ushort srcPort, string dstIp, ushort dstPort)
     {

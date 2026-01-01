@@ -90,7 +90,7 @@ namespace BPSR_ZDPS.Database.Migrations
                                             snapshot.DamageType,
                                             snapshot.DamageMode,
                                             snapshot.IsKill,
-                                            new BPSR_DeepsLib.ExtraPacketData(snapshot.Timestamp.Value));
+                                            new BPSR_ZDPSLib.ExtraPacketData(snapshot.Timestamp.Value));
 
                                     entity.SkillMetrics[skillStat.Key] = metrics;
                                 }

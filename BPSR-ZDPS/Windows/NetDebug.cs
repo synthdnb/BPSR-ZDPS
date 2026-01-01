@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 using Hexa.NET.ImGui;
-using static BPSR_DeepsLib.TcpReassembler;
+using static BPSR_ZDPSLib.TcpReassembler;
 
 namespace BPSR_ZDPS.Windows;
 
@@ -169,7 +169,7 @@ public static class NetDebug
             }
 
             /*
-            var activeGameProcess = BPSR_DeepsLib.Utils.GetCachedProcessEntry();
+            var activeGameProcess = BPSR_ZDPSLib.Utils.GetCachedProcessEntry();
             ImGui.TextUnformatted($"Active ProcessID: {activeGameProcess?.ProcessId ?? -1}, ProcessName: {activeGameProcess?.ProcessName ?? "N/A"}");
             */
 

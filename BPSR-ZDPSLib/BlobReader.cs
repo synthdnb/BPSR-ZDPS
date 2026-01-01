@@ -1,8 +1,8 @@
 ﻿using System.Buffers.Binary;
 using System.Diagnostics;
-using BPSR_DeepsLib.Blobs;
+using BPSR_ZDPSLib.Blobs;
 
-namespace BPSR_DeepsLib;
+namespace BPSR_ZDPSLib;
 
 public class BlobReader
 {
