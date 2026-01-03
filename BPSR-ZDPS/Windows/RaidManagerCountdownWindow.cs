@@ -484,10 +484,10 @@ namespace BPSR_ZDPS.Windows
 
     public class RaidManagerCountdownWindowSettings : WindowSettingsBase
     {
-        public bool AllowCountdowns = false;
+        public bool AllowCountdowns = true;
         public Vector2 CountdownPosition = new();
         public bool UseStylizedNumbers = true;
-        public List<Zproto.ChitChatChannelType> ChatChannels = new() { Zproto.ChitChatChannelType.ChannelTeam };
+        public HashSet<Zproto.ChitChatChannelType> ChatChannels = new() { Zproto.ChitChatChannelType.ChannelTeam };
         public List<long> PlayerUIDBlacklist = new();
     }
 }

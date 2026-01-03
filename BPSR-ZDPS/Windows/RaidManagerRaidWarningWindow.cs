@@ -181,7 +181,7 @@ namespace BPSR_ZDPS.Windows
                     ImGui.PushStyleColor(ImGuiCol.ChildBg, new Vector4(0, 0, 0, windowSettings.MessageBackgroundOpacity));
                     if (ImGui.BeginChild("##WarningsListChild", ImGuiChildFlags.AutoResizeY, ImGuiWindowFlags.NoInputs))
                     {
-                        ImGui.PushFont(null, 32.0f * windowSettings.MessageTextScale);
+                        ImGui.PushFont(null, 34.0f * (windowSettings.MessageTextScale * 0.01f));
                         LineHeight = ImGui.CalcTextSize("0WM0").Y + ImGui.GetStyle().ItemSpacing.Y + ImGui.GetStyle().FramePadding.Y;
                         ImGui.PushStyleColor(ImGuiCol.Text, Colors.OrangeRed);
 
@@ -314,10 +314,7 @@ namespace BPSR_ZDPS.Windows
                 ImGui.SetNextItemWidth(-1);
                 ImGui.PushStyleColor(ImGuiCol.FrameBgHovered, ImGui.GetColorU32(ImGuiCol.FrameBgHovered, 0.55f));
                 ImGui.PushStyleColor(ImGuiCol.FrameBgActive, ImGui.GetColorU32(ImGuiCol.FrameBgActive, 0.55f));
-                if (ImGui.SliderFloat("##MessageTextScale", ref windowSettings.MessageTextScale, 0.80f, 3.0f, $"{(int)(windowSettings.MessageTextScale * 100)}%%"))
-                {
-                    windowSettings.MessageTextScale = MathF.Round(windowSettings.MessageTextScale, 2);
-                }
+                ImGui.SliderInt("##MessageTextScale", ref windowSettings.MessageTextScale, 80, 300, $"{windowSettings.MessageTextScale}%%");
                 ImGui.PopStyleColor(2);
                 ImGui.Indent();
                 ImGui.BeginDisabled(true);
@@ -427,6 +424,8 @@ namespace BPSR_ZDPS.Windows
                         ImGui.EndListBox();
                     }
                 }
+
+                ImFileBrowser.Draw();
 
                 ImGui.End();
             }
@@ -581,14 +580,14 @@ namespace BPSR_ZDPS.Windows
 
     public class RaidManagerRaidWarningWindowSettings : WindowSettingsBase
     {
-        public bool AllowRaidWarnings = false;
+        public bool AllowRaidWarnings = true;
         public Vector2 RaidWarningMessagePosition = new();
         public Vector2 RaidWarningMessageSize = new();
-        public float MessageTextScale = 1.0f;
+        public int MessageTextScale = 100;
         public float MessageBackgroundOpacity = 0.0f;
         public bool PlayAlertSoundOnWarning = true;
         public string WarningNotificationSoundPath = "";
-        public List<Zproto.ChitChatChannelType> ChatChannels = new() { Zproto.ChitChatChannelType.ChannelTeam };
+        public HashSet<Zproto.ChitChatChannelType> ChatChannels = new() { Zproto.ChitChatChannelType.ChannelTeam };
         public List<long> PlayerUIDBlacklist = new();
     }
 }
