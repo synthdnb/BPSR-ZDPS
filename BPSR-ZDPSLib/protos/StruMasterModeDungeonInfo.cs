@@ -26,17 +26,16 @@ namespace Zproto {
           string.Concat(
             "CiNzdHJ1X21hc3Rlcl9tb2RlX2R1bmdlb25faW5mby5wcm90bxIGenByb3Rv",
             "GipzdHJ1X3NlYXNvbl9tYXN0ZXJfbW9kZV9kdW5nZW9uX2luZm8ucHJvdG8a",
-            "FXN0cnVfZGlydHlfbWFzay5wcm90byKAAgoVTWFzdGVyTW9kZUR1bmdlb25J",
+            "FXN0cnVfZGlydHlfbWFzay5wcm90byLnAQoVTWFzdGVyTW9kZUR1bmdlb25J",
             "bmZvEloKGG1hc3Rlcl9tb2RlX2R1bmdlb25faW5mbxgBIAMoCzI4Lnpwcm90",
             "by5NYXN0ZXJNb2RlRHVuZ2VvbkluZm8uTWFzdGVyTW9kZUR1bmdlb25JbmZv",
-            "RW50cnkSDwoHaXNfc2hvdxgCIAEoCBIXCg9jdXJfc2hvd19zZWFzb24YAyAB",
-            "KAUaYQoaTWFzdGVyTW9kZUR1bmdlb25JbmZvRW50cnkSCwoDa2V5GAEgASgF",
-            "EjIKBXZhbHVlGAIgASgLMiMuenByb3RvLlNlYXNvbk1hc3Rlck1vZGVEdW5n",
-            "ZW9uSW5mbzoCOAFiBnByb3RvMw=="));
+            "RW50cnkSDwoHaXNfc2hvdxgCIAEoCBphChpNYXN0ZXJNb2RlRHVuZ2Vvbklu",
+            "Zm9FbnRyeRILCgNrZXkYASABKAUSMgoFdmFsdWUYAiABKAsyIy56cHJvdG8u",
+            "U2Vhc29uTWFzdGVyTW9kZUR1bmdlb25JbmZvOgI4AWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Zproto.StruSeasonMasterModeDungeonInfoReflection.Descriptor, global::Zproto.StruDirtyMaskReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Zproto.MasterModeDungeonInfo), global::Zproto.MasterModeDungeonInfo.Parser, new[]{ "MasterModeDungeonInfo_", "IsShow", "CurShowSeason" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, })
+            new pbr::GeneratedClrTypeInfo(typeof(global::Zproto.MasterModeDungeonInfo), global::Zproto.MasterModeDungeonInfo.Parser, new[]{ "MasterModeDungeonInfo_", "IsShow" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, })
           }));
     }
     #endregion
@@ -80,7 +79,6 @@ namespace Zproto {
     public MasterModeDungeonInfo(MasterModeDungeonInfo other) : this() {
       masterModeDungeonInfo_ = other.masterModeDungeonInfo_.Clone();
       isShow_ = other.isShow_;
-      curShowSeason_ = other.curShowSeason_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -113,18 +111,6 @@ namespace Zproto {
       }
     }
 
-    /// <summary>Field number for the "cur_show_season" field.</summary>
-    public const int CurShowSeasonFieldNumber = 3;
-    private int curShowSeason_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int CurShowSeason {
-      get { return curShowSeason_; }
-      set {
-        curShowSeason_ = value;
-      }
-    }
-
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -142,7 +128,6 @@ namespace Zproto {
       }
       if (!MasterModeDungeonInfo_.Equals(other.MasterModeDungeonInfo_)) return false;
       if (IsShow != other.IsShow) return false;
-      if (CurShowSeason != other.CurShowSeason) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -152,7 +137,6 @@ namespace Zproto {
       int hash = 1;
       hash ^= MasterModeDungeonInfo_.GetHashCode();
       if (IsShow != false) hash ^= IsShow.GetHashCode();
-      if (CurShowSeason != 0) hash ^= CurShowSeason.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -176,10 +160,6 @@ namespace Zproto {
         output.WriteRawTag(16);
         output.WriteBool(IsShow);
       }
-      if (CurShowSeason != 0) {
-        output.WriteRawTag(24);
-        output.WriteInt32(CurShowSeason);
-      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -195,10 +175,6 @@ namespace Zproto {
         output.WriteRawTag(16);
         output.WriteBool(IsShow);
       }
-      if (CurShowSeason != 0) {
-        output.WriteRawTag(24);
-        output.WriteInt32(CurShowSeason);
-      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -212,9 +188,6 @@ namespace Zproto {
       size += masterModeDungeonInfo_.CalculateSize(_map_masterModeDungeonInfo_codec);
       if (IsShow != false) {
         size += 1 + 1;
-      }
-      if (CurShowSeason != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(CurShowSeason);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -231,9 +204,6 @@ namespace Zproto {
       masterModeDungeonInfo_.MergeFrom(other.masterModeDungeonInfo_);
       if (other.IsShow != false) {
         IsShow = other.IsShow;
-      }
-      if (other.CurShowSeason != 0) {
-        CurShowSeason = other.CurShowSeason;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -262,10 +232,6 @@ namespace Zproto {
             IsShow = input.ReadBool();
             break;
           }
-          case 24: {
-            CurShowSeason = input.ReadInt32();
-            break;
-          }
         }
       }
     #endif
@@ -291,10 +257,6 @@ namespace Zproto {
           }
           case 16: {
             IsShow = input.ReadBool();
-            break;
-          }
-          case 24: {
-            CurShowSeason = input.ReadInt32();
             break;
           }
         }

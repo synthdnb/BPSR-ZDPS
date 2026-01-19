@@ -25,7 +25,7 @@ namespace Zproto {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "CiJlbnVtX2VfdGVtcF9hdHRyX2VmZmVjdF90eXBlLnByb3RvEgZ6cHJvdG8q",
-            "pg4KE0VUZW1wQXR0ckVmZmVjdFR5cGUSDwoLVGVtcEF0dHJWYXIQABIZChVU",
+            "lQ0KE0VUZW1wQXR0ckVmZmVjdFR5cGUSDwoLVGVtcEF0dHJWYXIQABIZChVU",
             "ZW1wU3VtbW9uQ291bnRDaGFuZ2UQARIQCgxUZW1wTXVsdGlwbHkQAhILCgdU",
             "ZW1wQWRkEAMSEwoPVGVtcEF0dHJTa2lsbENEEGQSGAoUVGVtcEF0dHJTa2ls",
             "bENERml4ZWQQZRIXChNUZW1wQXR0clNraWxsRGFtYWdlEGYSGwoXVGVtcEF0",
@@ -62,10 +62,7 @@ namespace Zproto {
             "EO4FEhwKF1RlbXBBdHRyU2Vhc29uRGV4dGVyaXR5EO8FEh8KGlRlbXBBdHRy",
             "U2Vhc29uSW50ZWxsaWdlbmNlEPAFEhoKFVRlbXBBdHRyQWRhcHRpdmVCYXNp",
             "YxD4BRIbChZUZW1wQXR0ckFkYXB0aXZlQXR0YWNrEPkFEiAKG1RlbXBBdHRy",
-            "U3VtbW9uVXBwZXJMaW1pdEFkZBCgBhIfChpUZW1wQXR0clJvZ3VlRW50cnlJ",
-            "ZFdlaWdodBDSBhIfChpUZW1wQXR0clJvZ3VlRW50cnlCRFdlaWdodBDTBhIn",
-            "CiJUZW1wQXR0clJvZ3VlRW50cnlQcm9mZXNzaW9uV2VpZ2h0ENQGEiQKH1Rl",
-            "bXBBdHRyUm9ndWVFbnRyeVF1YWxpdHlXZWlnaHQQ1QZiBnByb3RvMw=="));
+            "U3VtbW9uVXBwZXJMaW1pdEFkZBCgBmIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Zproto.ETempAttrEffectType), }, null, null));
@@ -134,10 +131,6 @@ namespace Zproto {
     [pbr::OriginalName("TempAttrAdaptiveBasic")] TempAttrAdaptiveBasic = 760,
     [pbr::OriginalName("TempAttrAdaptiveAttack")] TempAttrAdaptiveAttack = 761,
     [pbr::OriginalName("TempAttrSummonUpperLimitAdd")] TempAttrSummonUpperLimitAdd = 800,
-    [pbr::OriginalName("TempAttrRogueEntryIdWeight")] TempAttrRogueEntryIdWeight = 850,
-    [pbr::OriginalName("TempAttrRogueEntryBDWeight")] TempAttrRogueEntryBdweight = 851,
-    [pbr::OriginalName("TempAttrRogueEntryProfessionWeight")] TempAttrRogueEntryProfessionWeight = 852,
-    [pbr::OriginalName("TempAttrRogueEntryQualityWeight")] TempAttrRogueEntryQualityWeight = 853,
   }
 
   #endregion

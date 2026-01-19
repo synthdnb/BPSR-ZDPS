@@ -25,12 +25,12 @@ namespace Zproto {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "CitzdHJ1X2Rpc3NvbHZlX3N0cnVjdHVyZV9ncm91cF9yZXF1ZXN0LnByb3Rv",
-            "EgZ6cHJvdG8iRAodRGlzc29sdmVTdHJ1Y3R1cmVHcm91cFJlcXVlc3QSEQoJ",
-            "Z3JvdXBfaWRzGAEgAygDEhAKCGlzX291dGVyGAIgASgIYgZwcm90bzM="));
+            "EgZ6cHJvdG8iQwodRGlzc29sdmVTdHJ1Y3R1cmVHcm91cFJlcXVlc3QSEAoI",
+            "Z3JvdXBfaWQYASABKAMSEAoIaXNfb3V0ZXIYAiABKAhiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Zproto.DissolveStructureGroupRequest), global::Zproto.DissolveStructureGroupRequest.Parser, new[]{ "GroupIds", "IsOuter" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Zproto.DissolveStructureGroupRequest), global::Zproto.DissolveStructureGroupRequest.Parser, new[]{ "GroupId", "IsOuter" }, null, null, null, null)
           }));
     }
     #endregion
@@ -72,7 +72,7 @@ namespace Zproto {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public DissolveStructureGroupRequest(DissolveStructureGroupRequest other) : this() {
-      groupIds_ = other.groupIds_.Clone();
+      groupId_ = other.groupId_;
       isOuter_ = other.isOuter_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -83,15 +83,16 @@ namespace Zproto {
       return new DissolveStructureGroupRequest(this);
     }
 
-    /// <summary>Field number for the "group_ids" field.</summary>
-    public const int GroupIdsFieldNumber = 1;
-    private static readonly pb::FieldCodec<long> _repeated_groupIds_codec
-        = pb::FieldCodec.ForInt64(10);
-    private readonly pbc::RepeatedField<long> groupIds_ = new pbc::RepeatedField<long>();
+    /// <summary>Field number for the "group_id" field.</summary>
+    public const int GroupIdFieldNumber = 1;
+    private long groupId_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<long> GroupIds {
-      get { return groupIds_; }
+    public long GroupId {
+      get { return groupId_; }
+      set {
+        groupId_ = value;
+      }
     }
 
     /// <summary>Field number for the "is_outer" field.</summary>
@@ -121,7 +122,7 @@ namespace Zproto {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if(!groupIds_.Equals(other.groupIds_)) return false;
+      if (GroupId != other.GroupId) return false;
       if (IsOuter != other.IsOuter) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -130,7 +131,7 @@ namespace Zproto {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      hash ^= groupIds_.GetHashCode();
+      if (GroupId != 0L) hash ^= GroupId.GetHashCode();
       if (IsOuter != false) hash ^= IsOuter.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -150,7 +151,10 @@ namespace Zproto {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      groupIds_.WriteTo(output, _repeated_groupIds_codec);
+      if (GroupId != 0L) {
+        output.WriteRawTag(8);
+        output.WriteInt64(GroupId);
+      }
       if (IsOuter != false) {
         output.WriteRawTag(16);
         output.WriteBool(IsOuter);
@@ -165,7 +169,10 @@ namespace Zproto {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      groupIds_.WriteTo(ref output, _repeated_groupIds_codec);
+      if (GroupId != 0L) {
+        output.WriteRawTag(8);
+        output.WriteInt64(GroupId);
+      }
       if (IsOuter != false) {
         output.WriteRawTag(16);
         output.WriteBool(IsOuter);
@@ -180,7 +187,9 @@ namespace Zproto {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      size += groupIds_.CalculateSize(_repeated_groupIds_codec);
+      if (GroupId != 0L) {
+        size += 1 + pb::CodedOutputStream.ComputeInt64Size(GroupId);
+      }
       if (IsOuter != false) {
         size += 1 + 1;
       }
@@ -196,7 +205,9 @@ namespace Zproto {
       if (other == null) {
         return;
       }
-      groupIds_.Add(other.groupIds_);
+      if (other.GroupId != 0L) {
+        GroupId = other.GroupId;
+      }
       if (other.IsOuter != false) {
         IsOuter = other.IsOuter;
       }
@@ -219,9 +230,8 @@ namespace Zproto {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
-          case 10:
           case 8: {
-            groupIds_.AddEntriesFrom(input, _repeated_groupIds_codec);
+            GroupId = input.ReadInt64();
             break;
           }
           case 16: {
@@ -247,9 +257,8 @@ namespace Zproto {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
-          case 10:
           case 8: {
-            groupIds_.AddEntriesFrom(ref input, _repeated_groupIds_codec);
+            GroupId = input.ReadInt64();
             break;
           }
           case 16: {

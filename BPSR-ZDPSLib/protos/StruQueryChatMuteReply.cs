@@ -25,14 +25,13 @@ namespace Zproto {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "CiBzdHJ1X3F1ZXJ5X2NoYXRfbXV0ZV9yZXBseS5wcm90bxIGenByb3RvGhdl",
-            "bnVtX2VfZXJyb3JfY29kZS5wcm90byJ1ChJRdWVyeUNoYXRNdXRlUmVwbHkS",
-            "DgoGaXNfYmFuGAEgASgIEhUKDWVuZF90aW1lc3RhbXAYAiABKAMSEgoKYmFu",
-            "X3JlYXNvbhgDIAEoBRIkCghlcnJfY29kZRgEIAEoDjISLnpwcm90by5FRXJy",
-            "b3JDb2RlYgZwcm90bzM="));
+            "bnVtX2VfZXJyb3JfY29kZS5wcm90byJhChJRdWVyeUNoYXRNdXRlUmVwbHkS",
+            "DgoGaXNfYmFuGAEgASgIEhUKDWVuZF90aW1lc3RhbXAYAiABKAMSJAoIZXJy",
+            "X2NvZGUYAyABKA4yEi56cHJvdG8uRUVycm9yQ29kZWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Zproto.EnumEErrorCodeReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Zproto.QueryChatMuteReply), global::Zproto.QueryChatMuteReply.Parser, new[]{ "IsBan", "EndTimestamp", "BanReason", "ErrCode" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Zproto.QueryChatMuteReply), global::Zproto.QueryChatMuteReply.Parser, new[]{ "IsBan", "EndTimestamp", "ErrCode" }, null, null, null, null)
           }));
     }
     #endregion
@@ -76,7 +75,6 @@ namespace Zproto {
     public QueryChatMuteReply(QueryChatMuteReply other) : this() {
       isBan_ = other.isBan_;
       endTimestamp_ = other.endTimestamp_;
-      banReason_ = other.banReason_;
       errCode_ = other.errCode_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -111,20 +109,8 @@ namespace Zproto {
       }
     }
 
-    /// <summary>Field number for the "ban_reason" field.</summary>
-    public const int BanReasonFieldNumber = 3;
-    private int banReason_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int BanReason {
-      get { return banReason_; }
-      set {
-        banReason_ = value;
-      }
-    }
-
     /// <summary>Field number for the "err_code" field.</summary>
-    public const int ErrCodeFieldNumber = 4;
+    public const int ErrCodeFieldNumber = 3;
     private global::Zproto.EErrorCode errCode_ = global::Zproto.EErrorCode.ErrSuccess;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -152,7 +138,6 @@ namespace Zproto {
       }
       if (IsBan != other.IsBan) return false;
       if (EndTimestamp != other.EndTimestamp) return false;
-      if (BanReason != other.BanReason) return false;
       if (ErrCode != other.ErrCode) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -163,7 +148,6 @@ namespace Zproto {
       int hash = 1;
       if (IsBan != false) hash ^= IsBan.GetHashCode();
       if (EndTimestamp != 0L) hash ^= EndTimestamp.GetHashCode();
-      if (BanReason != 0) hash ^= BanReason.GetHashCode();
       if (ErrCode != global::Zproto.EErrorCode.ErrSuccess) hash ^= ErrCode.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -191,12 +175,8 @@ namespace Zproto {
         output.WriteRawTag(16);
         output.WriteInt64(EndTimestamp);
       }
-      if (BanReason != 0) {
-        output.WriteRawTag(24);
-        output.WriteInt32(BanReason);
-      }
       if (ErrCode != global::Zproto.EErrorCode.ErrSuccess) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(24);
         output.WriteEnum((int) ErrCode);
       }
       if (_unknownFields != null) {
@@ -217,12 +197,8 @@ namespace Zproto {
         output.WriteRawTag(16);
         output.WriteInt64(EndTimestamp);
       }
-      if (BanReason != 0) {
-        output.WriteRawTag(24);
-        output.WriteInt32(BanReason);
-      }
       if (ErrCode != global::Zproto.EErrorCode.ErrSuccess) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(24);
         output.WriteEnum((int) ErrCode);
       }
       if (_unknownFields != null) {
@@ -240,9 +216,6 @@ namespace Zproto {
       }
       if (EndTimestamp != 0L) {
         size += 1 + pb::CodedOutputStream.ComputeInt64Size(EndTimestamp);
-      }
-      if (BanReason != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(BanReason);
       }
       if (ErrCode != global::Zproto.EErrorCode.ErrSuccess) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) ErrCode);
@@ -264,9 +237,6 @@ namespace Zproto {
       }
       if (other.EndTimestamp != 0L) {
         EndTimestamp = other.EndTimestamp;
-      }
-      if (other.BanReason != 0) {
-        BanReason = other.BanReason;
       }
       if (other.ErrCode != global::Zproto.EErrorCode.ErrSuccess) {
         ErrCode = other.ErrCode;
@@ -299,10 +269,6 @@ namespace Zproto {
             break;
           }
           case 24: {
-            BanReason = input.ReadInt32();
-            break;
-          }
-          case 32: {
             ErrCode = (global::Zproto.EErrorCode) input.ReadEnum();
             break;
           }
@@ -334,10 +300,6 @@ namespace Zproto {
             break;
           }
           case 24: {
-            BanReason = input.ReadInt32();
-            break;
-          }
-          case 32: {
             ErrCode = (global::Zproto.EErrorCode) input.ReadEnum();
             break;
           }

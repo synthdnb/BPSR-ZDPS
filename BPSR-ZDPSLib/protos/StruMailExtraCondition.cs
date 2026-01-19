@@ -25,15 +25,14 @@ namespace Zproto {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "Ch9zdHJ1X21haWxfZXh0cmFfY29uZGl0aW9uLnByb3RvEgZ6cHJvdG8aH3N0",
-            "cnVfbWFpbF9sZXZlbF9jb25kaXRpb24ucHJvdG8ioAEKEk1haWxFeHRyYUNv",
+            "cnVfbWFpbF9sZXZlbF9jb25kaXRpb24ucHJvdG8igwEKEk1haWxFeHRyYUNv",
             "bmRpdGlvbhIpCgVsZXZlbBgBIAEoCzIaLnpwcm90by5NYWlsTGV2ZWxDb25k",
             "aXRpb24SFgoObG9naW5fY2hhbm5lbHMYAiADKAUSGAoQbGFzdF9hY3RpdmVf",
-            "ZGF5cxgDIAEoBRIQCghhcmVhX2lkcxgEIAMoCRIbChNyZWdpc3Rlcl9hZnRl",
-            "cl90aW1lGAUgASgDYgZwcm90bzM="));
+            "ZGF5cxgDIAEoBRIQCghhcmVhX2lkcxgEIAMoCWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Zproto.StruMailLevelConditionReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Zproto.MailExtraCondition), global::Zproto.MailExtraCondition.Parser, new[]{ "Level", "LoginChannels", "LastActiveDays", "AreaIds", "RegisterAfterTime" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Zproto.MailExtraCondition), global::Zproto.MailExtraCondition.Parser, new[]{ "Level", "LoginChannels", "LastActiveDays", "AreaIds" }, null, null, null, null)
           }));
     }
     #endregion
@@ -79,7 +78,6 @@ namespace Zproto {
       loginChannels_ = other.loginChannels_.Clone();
       lastActiveDays_ = other.lastActiveDays_;
       areaIds_ = other.areaIds_.Clone();
-      registerAfterTime_ = other.registerAfterTime_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -135,18 +133,6 @@ namespace Zproto {
       get { return areaIds_; }
     }
 
-    /// <summary>Field number for the "register_after_time" field.</summary>
-    public const int RegisterAfterTimeFieldNumber = 5;
-    private long registerAfterTime_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public long RegisterAfterTime {
-      get { return registerAfterTime_; }
-      set {
-        registerAfterTime_ = value;
-      }
-    }
-
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -166,7 +152,6 @@ namespace Zproto {
       if(!loginChannels_.Equals(other.loginChannels_)) return false;
       if (LastActiveDays != other.LastActiveDays) return false;
       if(!areaIds_.Equals(other.areaIds_)) return false;
-      if (RegisterAfterTime != other.RegisterAfterTime) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -178,7 +163,6 @@ namespace Zproto {
       hash ^= loginChannels_.GetHashCode();
       if (LastActiveDays != 0) hash ^= LastActiveDays.GetHashCode();
       hash ^= areaIds_.GetHashCode();
-      if (RegisterAfterTime != 0L) hash ^= RegisterAfterTime.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -207,10 +191,6 @@ namespace Zproto {
         output.WriteInt32(LastActiveDays);
       }
       areaIds_.WriteTo(output, _repeated_areaIds_codec);
-      if (RegisterAfterTime != 0L) {
-        output.WriteRawTag(40);
-        output.WriteInt64(RegisterAfterTime);
-      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -231,10 +211,6 @@ namespace Zproto {
         output.WriteInt32(LastActiveDays);
       }
       areaIds_.WriteTo(ref output, _repeated_areaIds_codec);
-      if (RegisterAfterTime != 0L) {
-        output.WriteRawTag(40);
-        output.WriteInt64(RegisterAfterTime);
-      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -253,9 +229,6 @@ namespace Zproto {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(LastActiveDays);
       }
       size += areaIds_.CalculateSize(_repeated_areaIds_codec);
-      if (RegisterAfterTime != 0L) {
-        size += 1 + pb::CodedOutputStream.ComputeInt64Size(RegisterAfterTime);
-      }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -279,9 +252,6 @@ namespace Zproto {
         LastActiveDays = other.LastActiveDays;
       }
       areaIds_.Add(other.areaIds_);
-      if (other.RegisterAfterTime != 0L) {
-        RegisterAfterTime = other.RegisterAfterTime;
-      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -321,10 +291,6 @@ namespace Zproto {
             areaIds_.AddEntriesFrom(input, _repeated_areaIds_codec);
             break;
           }
-          case 40: {
-            RegisterAfterTime = input.ReadInt64();
-            break;
-          }
         }
       }
     #endif
@@ -362,10 +328,6 @@ namespace Zproto {
           }
           case 34: {
             areaIds_.AddEntriesFrom(ref input, _repeated_areaIds_codec);
-            break;
-          }
-          case 40: {
-            RegisterAfterTime = input.ReadInt64();
             break;
           }
         }

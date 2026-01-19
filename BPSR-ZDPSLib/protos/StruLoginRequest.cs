@@ -25,7 +25,7 @@ namespace Zproto {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChhzdHJ1X2xvZ2luX3JlcXVlc3QucHJvdG8SBnpwcm90bxoWc3RydV9kZXZp",
-            "Y2VfaW5mby5wcm90bxoXc3RydV9sYXVuY2hfcGFyYW0ucHJvdG8i+QMKDExv",
+            "Y2VfaW5mby5wcm90bxoXc3RydV9sYXVuY2hfcGFyYW0ucHJvdG8i2AMKDExv",
             "Z2luUmVxdWVzdBIPCgdvcGVuX2lkGAIgASgJEg0KBXRva2VuGAMgASgJEhAK",
             "CHNka190eXBlGAQgASgFEhIKCmNoYW5uZWxfaWQYBSABKAUSCgoCb3MYBiAB",
             "KAUSFQoNcGxhdGZvcm1fdHlwZRgHIAEoBRInCgtkZXZpY2VfaW5mbxgIIAEo",
@@ -36,12 +36,11 @@ namespace Zproto {
             "dXJjZV92ZXJzaW9uGA8gASgJEikKDGxhdW5jaF9wYXJhbRgSIAEoCzITLnpw",
             "cm90by5MYXVuY2hQYXJhbRIVCg1hcmVhX2lkX3Rva2VuGBMgASgJEhUKDWlz",
             "X2Nsb3VkX2dhbWUYFCABKAgSEwoLZGlzdGluY3RfaWQYFSABKAkSFwoPYm91",
-            "bmRfcHJvdmlkZXJzGBYgAygJEhAKCGxhbmd1YWdlGBcgASgFEg0KBWdjbGlk",
-            "GBggASgJYgZwcm90bzM="));
+            "bmRfcHJvdmlkZXJzGBYgAygJYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Zproto.StruDeviceInfoReflection.Descriptor, global::Zproto.StruLaunchParamReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Zproto.LoginRequest), global::Zproto.LoginRequest.Parser, new[]{ "OpenId", "Token", "SdkType", "ChannelId", "Os", "PlatformType", "DeviceInfo", "ClientVersion", "ProtocolVersion", "ConfigVersion", "AreaId", "IOsAdServiceToken", "PayExtData", "ClientResourceVersion", "LaunchParam", "AreaIdToken", "IsCloudGame", "DistinctId", "BoundProviders", "Language", "Gclid" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Zproto.LoginRequest), global::Zproto.LoginRequest.Parser, new[]{ "OpenId", "Token", "SdkType", "ChannelId", "Os", "PlatformType", "DeviceInfo", "ClientVersion", "ProtocolVersion", "ConfigVersion", "AreaId", "IOsAdServiceToken", "PayExtData", "ClientResourceVersion", "LaunchParam", "AreaIdToken", "IsCloudGame", "DistinctId", "BoundProviders" }, null, null, null, null)
           }));
     }
     #endregion
@@ -102,8 +101,6 @@ namespace Zproto {
       isCloudGame_ = other.isCloudGame_;
       distinctId_ = other.distinctId_;
       boundProviders_ = other.boundProviders_.Clone();
-      language_ = other.language_;
-      gclid_ = other.gclid_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -340,30 +337,6 @@ namespace Zproto {
       get { return boundProviders_; }
     }
 
-    /// <summary>Field number for the "language" field.</summary>
-    public const int LanguageFieldNumber = 23;
-    private int language_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int Language {
-      get { return language_; }
-      set {
-        language_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "gclid" field.</summary>
-    public const int GclidFieldNumber = 24;
-    private string gclid_ = "";
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string Gclid {
-      get { return gclid_; }
-      set {
-        gclid_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -398,8 +371,6 @@ namespace Zproto {
       if (IsCloudGame != other.IsCloudGame) return false;
       if (DistinctId != other.DistinctId) return false;
       if(!boundProviders_.Equals(other.boundProviders_)) return false;
-      if (Language != other.Language) return false;
-      if (Gclid != other.Gclid) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -426,8 +397,6 @@ namespace Zproto {
       if (IsCloudGame != false) hash ^= IsCloudGame.GetHashCode();
       if (DistinctId.Length != 0) hash ^= DistinctId.GetHashCode();
       hash ^= boundProviders_.GetHashCode();
-      if (Language != 0) hash ^= Language.GetHashCode();
-      if (Gclid.Length != 0) hash ^= Gclid.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -519,14 +488,6 @@ namespace Zproto {
         output.WriteString(DistinctId);
       }
       boundProviders_.WriteTo(output, _repeated_boundProviders_codec);
-      if (Language != 0) {
-        output.WriteRawTag(184, 1);
-        output.WriteInt32(Language);
-      }
-      if (Gclid.Length != 0) {
-        output.WriteRawTag(194, 1);
-        output.WriteString(Gclid);
-      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -610,14 +571,6 @@ namespace Zproto {
         output.WriteString(DistinctId);
       }
       boundProviders_.WriteTo(ref output, _repeated_boundProviders_codec);
-      if (Language != 0) {
-        output.WriteRawTag(184, 1);
-        output.WriteInt32(Language);
-      }
-      if (Gclid.Length != 0) {
-        output.WriteRawTag(194, 1);
-        output.WriteString(Gclid);
-      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -683,12 +636,6 @@ namespace Zproto {
         size += 2 + pb::CodedOutputStream.ComputeStringSize(DistinctId);
       }
       size += boundProviders_.CalculateSize(_repeated_boundProviders_codec);
-      if (Language != 0) {
-        size += 2 + pb::CodedOutputStream.ComputeInt32Size(Language);
-      }
-      if (Gclid.Length != 0) {
-        size += 2 + pb::CodedOutputStream.ComputeStringSize(Gclid);
-      }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -762,12 +709,6 @@ namespace Zproto {
         DistinctId = other.DistinctId;
       }
       boundProviders_.Add(other.boundProviders_);
-      if (other.Language != 0) {
-        Language = other.Language;
-      }
-      if (other.Gclid.Length != 0) {
-        Gclid = other.Gclid;
-      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -869,14 +810,6 @@ namespace Zproto {
             boundProviders_.AddEntriesFrom(input, _repeated_boundProviders_codec);
             break;
           }
-          case 184: {
-            Language = input.ReadInt32();
-            break;
-          }
-          case 194: {
-            Gclid = input.ReadString();
-            break;
-          }
         }
       }
     #endif
@@ -976,14 +909,6 @@ namespace Zproto {
           }
           case 178: {
             boundProviders_.AddEntriesFrom(ref input, _repeated_boundProviders_codec);
-            break;
-          }
-          case 184: {
-            Language = input.ReadInt32();
-            break;
-          }
-          case 194: {
-            Gclid = input.ReadString();
             break;
           }
         }

@@ -685,7 +685,7 @@
     },
     "2406":
     {
-        "Name": "Vanguard Strike/Vanguard Hunt",
+        "Name": "Vanguard Strike/Vanguard Pursuit",
         "Icon": "ui/atlas/skill_weapon_jd/weapon_jd-01_tg02"
     },
     "2407":
@@ -819,11 +819,6 @@
         "Icon": "ui/atlas/skill_weapon_jd/weapon_jd-01_kx08"
     },
     "55415":
-    {
-        "Name": "Radiance",
-        "Icon": "ui/atlas/skill_weapon_jd/weapon_jd-01_kx08"
-    },
-    "240102":
     {
         "Name": "Radiance",
         "Icon": "ui/atlas/skill_weapon_jd/weapon_jd-01_kx08"
@@ -1811,6 +1806,10 @@
     "231001":
     {
         "Name": "Rhapsody of Flame - Damage"
+    },
+    "240102":
+    {
+        "Name": "Bright Resolve"
     },
     "300000":
     {
@@ -3205,7 +3204,7 @@
     },
     "2206552":
     {
-        "Name": "Radiant Core"
+        "Name": "Core of Light"
     },
     "2207141":
     {

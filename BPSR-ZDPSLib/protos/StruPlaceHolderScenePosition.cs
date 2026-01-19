@@ -25,14 +25,13 @@ namespace Zproto {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "CiZzdHJ1X3BsYWNlX2hvbGRlcl9zY2VuZV9wb3NpdGlvbi5wcm90bxIGenBy",
-            "b3RvIowBChhQbGFjZUhvbGRlclNjZW5lUG9zaXRpb24SEAoIc2NlbmVfaWQY",
-            "ASABKAUSDwoHbGluZV9pZBgCIAEoBRIRCglwb3NpdGlvbngYAyABKAUSEQoJ",
-            "cG9zaXRpb255GAQgASgFEhEKCXBvc2l0aW9uehgFIAEoBRIUCgxtYXBfbGF5",
-            "ZXJfaWQYBiABKAViBnByb3RvMw=="));
+            "b3RvInYKGFBsYWNlSG9sZGVyU2NlbmVQb3NpdGlvbhIQCghzY2VuZV9pZBgB",
+            "IAEoBRIPCgdsaW5lX2lkGAIgASgFEhEKCXBvc2l0aW9ueBgDIAEoBRIRCglw",
+            "b3NpdGlvbnkYBCABKAUSEQoJcG9zaXRpb256GAUgASgFYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Zproto.PlaceHolderScenePosition), global::Zproto.PlaceHolderScenePosition.Parser, new[]{ "SceneId", "LineId", "Positionx", "Positiony", "Positionz", "MapLayerId" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Zproto.PlaceHolderScenePosition), global::Zproto.PlaceHolderScenePosition.Parser, new[]{ "SceneId", "LineId", "Positionx", "Positiony", "Positionz" }, null, null, null, null)
           }));
     }
     #endregion
@@ -79,7 +78,6 @@ namespace Zproto {
       positionx_ = other.positionx_;
       positiony_ = other.positiony_;
       positionz_ = other.positionz_;
-      mapLayerId_ = other.mapLayerId_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -149,18 +147,6 @@ namespace Zproto {
       }
     }
 
-    /// <summary>Field number for the "map_layer_id" field.</summary>
-    public const int MapLayerIdFieldNumber = 6;
-    private int mapLayerId_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int MapLayerId {
-      get { return mapLayerId_; }
-      set {
-        mapLayerId_ = value;
-      }
-    }
-
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -181,7 +167,6 @@ namespace Zproto {
       if (Positionx != other.Positionx) return false;
       if (Positiony != other.Positiony) return false;
       if (Positionz != other.Positionz) return false;
-      if (MapLayerId != other.MapLayerId) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -194,7 +179,6 @@ namespace Zproto {
       if (Positionx != 0) hash ^= Positionx.GetHashCode();
       if (Positiony != 0) hash ^= Positiony.GetHashCode();
       if (Positionz != 0) hash ^= Positionz.GetHashCode();
-      if (MapLayerId != 0) hash ^= MapLayerId.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -233,10 +217,6 @@ namespace Zproto {
         output.WriteRawTag(40);
         output.WriteInt32(Positionz);
       }
-      if (MapLayerId != 0) {
-        output.WriteRawTag(48);
-        output.WriteInt32(MapLayerId);
-      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -267,10 +247,6 @@ namespace Zproto {
         output.WriteRawTag(40);
         output.WriteInt32(Positionz);
       }
-      if (MapLayerId != 0) {
-        output.WriteRawTag(48);
-        output.WriteInt32(MapLayerId);
-      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -295,9 +271,6 @@ namespace Zproto {
       }
       if (Positionz != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Positionz);
-      }
-      if (MapLayerId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(MapLayerId);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -325,9 +298,6 @@ namespace Zproto {
       }
       if (other.Positionz != 0) {
         Positionz = other.Positionz;
-      }
-      if (other.MapLayerId != 0) {
-        MapLayerId = other.MapLayerId;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -368,10 +338,6 @@ namespace Zproto {
             Positionz = input.ReadInt32();
             break;
           }
-          case 48: {
-            MapLayerId = input.ReadInt32();
-            break;
-          }
         }
       }
     #endif
@@ -409,10 +375,6 @@ namespace Zproto {
           }
           case 40: {
             Positionz = input.ReadInt32();
-            break;
-          }
-          case 48: {
-            MapLayerId = input.ReadInt32();
             break;
           }
         }
