@@ -13,6 +13,10 @@ namespace BPSR_ZDPS
         public static void ProcessNoticeUpdateTeamInfo(GrpcTeamNtf.Types.NoticeUpdateTeamInfo vData, ExtraPacketData extraData)
         {
             AppState.PartyTeamId = vData.VRequest.BaseInfo.TeamId;
+            if (AppState.PlayerUUID != 0 && EncounterManager.Current != null)
+            {
+                EncounterManager.Current.SetAttrKV(AppState.PlayerUUID, "AttrTeamId", vData.VRequest.BaseInfo.TeamId);
+            }
         }
 
         public static void ProcessNoticeUpdateTeamMemberInfo(GrpcTeamNtf.Types.NoticeUpdateTeamMemberInfo vData, ExtraPacketData extraData)
@@ -23,6 +27,10 @@ namespace BPSR_ZDPS
         public static void ProcessNotifyJoinTeam(GrpcTeamNtf.Types.NotifyJoinTeam vData, ExtraPacketData extraData)
         {
             AppState.PartyTeamId = vData.VRequest.BaseInfo.TeamId;
+            if (AppState.PlayerUUID != 0 && EncounterManager.Current != null)
+            {
+                EncounterManager.Current.SetAttrKV(AppState.PlayerUUID, "AttrTeamId", vData.VRequest.BaseInfo.TeamId);
+            }
 
             foreach (var member in vData.VRequest.MemberData)
             {
@@ -74,17 +82,29 @@ namespace BPSR_ZDPS
             if (vData.VRequest.CharId == AppState.PlayerUID)
             {
                 AppState.PartyTeamId = 0;
+                if (AppState.PlayerUUID != 0 && EncounterManager.Current != null)
+                {
+                    EncounterManager.Current.SetAttrKV(AppState.PlayerUUID, "AttrTeamId", 0);
+                }
             }
         }
 
         public static void ProcessNoticeTeamDissolve(GrpcTeamNtf.Types.NoticeTeamDissolve vData, ExtraPacketData extraData)
         {
             AppState.PartyTeamId = 0;
+            if (AppState.PlayerUUID != 0 && EncounterManager.Current != null)
+            {
+                EncounterManager.Current.SetAttrKV(AppState.PlayerUUID, "AttrTeamId", 0);
+            }
         }
 
         public static void ProcessNotifyBeTransferLeader(GrpcTeamNtf.Types.NotifyBeTransferLeader vData, ExtraPacketData extraData)
         {
             AppState.PartyTeamId = vData.VRequest.LeaderData.TeamData.TeamId;
+            if (AppState.PlayerUUID != 0 && EncounterManager.Current != null)
+            {
+                EncounterManager.Current.SetAttrKV(AppState.PlayerUUID, "AttrTeamId", vData.VRequest.LeaderData.TeamData.TeamId);
+            }
         }
 
         public static void ProcessNotifyTeamActivityState(GrpcTeamNtf.Types.NotifyTeamActivityState vData, ExtraPacketData extraData)

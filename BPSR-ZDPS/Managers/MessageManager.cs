@@ -717,7 +717,7 @@ namespace BPSR_ZDPS
                     case EAttrType.AttrSkillLevelIdList:
                         EncounterManager.Current.SetAttrKV(uuid, "AttrSkillLevelIdList", reader.ReadInt32());
                         // TODO: Enable this when we want to track every skill level and tier for players when they appear
-                        /*List<Zproto.SkillLevelInfo> skillLevelInfoList = new();
+                        /*List<SkillLevelInfo> skillLevelInfoList = new();
                         while (!reader.IsAtEnd)
                         {
                             int len = reader.ReadLength();
